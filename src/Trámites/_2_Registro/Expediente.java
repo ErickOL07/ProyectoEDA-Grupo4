@@ -1,46 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Paquete1;
+package Trámites._2_Registro;
 
-/**
- *
- * @author Gianmarco Arrasco
- */
 import java.util.Date;
 
 public class Expediente {
-    private String id;
-    private String prioridad;
-    private String datosInteresado;
+    private int id;
+    private int prioridad;
+    private Interesado datosInteresado;
     private String asunto;
     private String documentoReferencia;
     private String fechaHoraInicio;
     private String fechaHoraFinalizacion;
     private ListaEnlazada<Movimiento> movimientos;
 
-    public Expediente(String id, String prioridad, String datosInteresado, String asunto, String documentoReferencia) {
-        this.id = id;
-        this.prioridad = prioridad;
+    public Expediente(Interesado datosInteresado, String asunto, String documentoReferencia) {
         this.datosInteresado = datosInteresado;
         this.asunto = asunto;
         this.documentoReferencia = documentoReferencia;
-        this.fechaHoraInicio = "";
-        this.fechaHoraFinalizacion = "";
-        this.movimientos = new ListaEnlazada<>();
+        this.movimientos = new ListaEnlazada<Movimiento>();
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public String getPrioridad() {
+    public void setid(int id)
+    {
+        this.id=id;
+    }
+
+    public int getPrioridad() {
         return prioridad;
     }
 
-    public String getDatosInteresado() {
+    public void setPrioridad(int Prioridad)
+        {
+            this.prioridad=Prioridad;
+        }
+
+    public Interesado getDatosInteresado() {
         return datosInteresado;
     }
 

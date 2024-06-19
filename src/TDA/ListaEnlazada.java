@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Paquete1;
+package TDA;
 
-/**
- *
- * @author Gianmarco Arrasco
- */
 public class ListaEnlazada<T> {
     private Nodo<T> head;
 
@@ -21,7 +12,7 @@ public class ListaEnlazada<T> {
     }
 
     public void insertar(T data) {
-        Nodo<T> nuevo = new Nodo<>(data);
+        Nodo<T> nuevo = new Nodo<T>(data);
         if (estaVacia()) {
             head = nuevo;
         } else {
@@ -70,6 +61,5 @@ public class ListaEnlazada<T> {
     public Nodo<T> getHead() {
         return head;
     }
-    
-    
+
 }

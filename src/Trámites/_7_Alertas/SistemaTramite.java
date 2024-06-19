@@ -1,14 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Paquete1;
 
-/**
- *
- * @author Gianmarco Arrasco
- */
 import java.util.Date;
 
 public class SistemaTramite {
@@ -16,8 +6,8 @@ public class SistemaTramite {
     private ListaEnlazada<Dependencia> listaDependencias;
 
     public SistemaTramite() {
-        this.listaExpedientes = new ListaEnlazada<>();
-        this.listaDependencias = new ListaEnlazada<>();
+        this.listaExpedientes = new ListaEnlazada<Expediente>();
+        this.listaDependencias = new ListaEnlazada<Dependencia>();
     }
 
     public void registrarExpediente(Dependencia dependencia, Expediente expediente) {
@@ -27,7 +17,7 @@ public class SistemaTramite {
         dependencia.agregarExpediente(expediente);
     }
 
-    public void moverExpediente(String expedienteId, String dependenciaDestino) {
+    public void moverExpediente(int expedienteId, String dependenciaDestino) {
         Nodo<Expediente> nodoExpediente = buscarExpediente(expedienteId);
         Nodo<Dependencia> nodoDependencia = listaDependencias.buscar(new Dependencia(dependenciaDestino));
 
@@ -41,7 +31,7 @@ public class SistemaTramite {
         }
     }
 
-    public void finalizarExpediente(String expedienteId) {
+    public void finalizarExpediente(int expedienteId) {
         Nodo<Expediente> nodoExpediente = buscarExpediente(expedienteId);
         if (nodoExpediente != null) {
             Expediente expediente = nodoExpediente.getData();
@@ -50,7 +40,7 @@ public class SistemaTramite {
         }
     }
 
-    public void mostrarSeguimiento(String expedienteId) {
+    public void mostrarSeguimiento(int expedienteId) {
         Nodo<Expediente> nodoExpediente = buscarExpediente(expedienteId);
         if (nodoExpediente != null) {
             Expediente expediente = nodoExpediente.getData();
@@ -68,13 +58,11 @@ public class SistemaTramite {
     public ListaEnlazada<Dependencia> getListaDependencias() {
         return listaDependencias;
     }
-    
-    
-    
-    private Nodo<Expediente> buscarExpediente(String expedienteId) {
+
+    private Nodo<Expediente> buscarExpediente(int expedienteId) {
         Nodo<Expediente> current = listaExpedientes.getHead();
         while (current != null) {
-            if (current.getData().getId().equals(expedienteId)) {
+            if (current.getData().getId()==expedienteId) {
                 return current;
             }
             current = current.getNext();
@@ -82,5 +70,3 @@ public class SistemaTramite {
         return null;
     }
 }
-
-

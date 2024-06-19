@@ -1,15 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Paquete1;
+package Trámites._2_Registro;
 
-/**
- *
- * @author Gianmarco Arrasco
- */
-public class ColaExpedientes {
+
+public class ColaExpediente {
     private class NodoCola {
         private Expediente expediente;
         private NodoCola next;
@@ -23,7 +15,7 @@ public class ColaExpedientes {
     private NodoCola front;
     private NodoCola rear;
 
-    public ColaExpedientes() {
+    public ColaExpediente() {
         this.front = null;
         this.rear = null;
     }
@@ -33,14 +25,22 @@ public class ColaExpedientes {
     }
 
     public void encolar(Expediente expediente) {
+         int id=0;
+         int prioridad=0;
         NodoCola nuevo = new NodoCola(expediente);
         if (estaVacia()) {
             front = nuevo;
             rear = nuevo;
+            id++;
+            prioridad++;
         } else {
             rear.next = nuevo;
             rear = nuevo;
+            id++;
+            prioridad++;
         }
+        expediente.setid(id); 
+        expediente.setPrioridad(prioridad);
     }
 
     public Expediente desencolar() {

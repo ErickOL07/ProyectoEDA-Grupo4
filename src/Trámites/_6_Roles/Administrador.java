@@ -1,22 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Paquete1;
 
-/**
- *
- * @author Gianmarco Arrasco
- */
+import tda.*;
+
+
 public class Administrador extends Usuario {
     private ListaEnlazada<Usuario> listaUsuarios;
     private ListaEnlazada<Dependencia> listaDependencias;
 
     public Administrador(String nombreUsuario, String contraseña) {
         super(nombreUsuario, contraseña);
-        this.listaUsuarios = new ListaEnlazada<>();
-        this.listaDependencias = new ListaEnlazada<>();
+        this.listaUsuarios = new ListaEnlazada<Usuario>();
+        this.listaDependencias = new ListaEnlazada<Dependencia>();
     }
 
     public void administrarCuentas(Usuario usuario, String accion) {
@@ -43,4 +36,3 @@ public class Administrador extends Usuario {
         }
     }
 }
-

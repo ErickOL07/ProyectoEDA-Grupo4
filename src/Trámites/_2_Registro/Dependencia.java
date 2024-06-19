@@ -1,28 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Paquete1;
+package Trámites._2_Registro;
 
-/**
- *
- * @author Gianmarco Arrasco
- */
 public class Dependencia {
     private String nombre;
-    private ColaExpedientes expedientes;
+    private ColaExpediente expedientes;
 
     public Dependencia(String nombre) {
         this.nombre = nombre;
-        this.expedientes = new ColaExpedientes();
+        this.expedientes = new ColaExpediente();
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public ColaExpedientes getExpedientes() {
+    public ColaExpediente getExpedientes() {
         return expedientes;
     }
 
