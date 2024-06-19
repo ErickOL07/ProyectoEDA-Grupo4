@@ -1,10 +1,10 @@
 package Trámites._2_Registro;
 
-public class Dependencia {
+public class Dependencia2 {
     private String nombre;
     private ColaExpediente expedientes;
 
-    public Dependencia(String nombre) {
+    public Dependencia2(String nombre) {
         this.nombre = nombre;
         this.expedientes = new ColaExpediente();
     }

@@ -1,3 +1,4 @@
+package Trámites._5_Interesados;
 
 public abstract class Usuario {
     private String nombreUsuario;

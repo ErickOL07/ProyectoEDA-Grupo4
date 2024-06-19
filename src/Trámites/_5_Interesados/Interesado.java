@@ -1,4 +1,6 @@
-package Trámites._4_Seguimiento;
+package Trámites._5_Interesados;
+
+import Trámites._4_Seguimiento.*;
 
 public class Interesado extends Usuario {
 

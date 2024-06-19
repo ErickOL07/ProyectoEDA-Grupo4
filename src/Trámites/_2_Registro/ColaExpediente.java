@@ -1,8 +1,9 @@
 package Trámites._2_Registro;
 
-
 public class ColaExpediente {
+
     private class NodoCola {
+
         private Expediente expediente;
         private NodoCola next;
 
@@ -25,22 +26,44 @@ public class ColaExpediente {
     }
 
     public void encolar(Expediente expediente) {
-         int id=0;
-         int prioridad=0;
+        int id = 0;
+        int orden = 0;
         NodoCola nuevo = new NodoCola(expediente);
+
         if (estaVacia()) {
             front = nuevo;
             rear = nuevo;
             id++;
-            prioridad++;
+            orden++;
         } else {
-            rear.next = nuevo;
-            rear = nuevo;
-            id++;
-            prioridad++;
+            if (expediente.isPrioridad()) {
+                if (!rear.expediente.isPrioridad()) {
+                    NodoCola temp = front;
+                    NodoCola prev = null;
+
+                    while (temp != null && temp.expediente.isPrioridad()) {
+                        prev = temp;
+                        temp = temp.next;
+                    }
+                    if (prev == null) {
+                        nuevo.next = front;
+                        front = nuevo;
+                    } else {
+                        nuevo.next = temp;
+                        prev.next = nuevo;
+                    }
+                    if (temp == null) {
+                        rear = nuevo;
+                    }
+                }
+            } else {
+                rear.next = nuevo;
+                id++;
+                orden++;
+            }
         }
-        expediente.setid(id); 
-        expediente.setPrioridad(prioridad);
+        expediente.ID(id);
+        expediente.setOrden(orden);
     }
 
     public Expediente desencolar() {

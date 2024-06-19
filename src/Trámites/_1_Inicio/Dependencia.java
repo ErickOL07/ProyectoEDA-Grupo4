@@ -2,16 +2,16 @@ package Trámites._1_Inicio;
 
 public class Dependencia {
 
-    private String tipo, subTipo, ID;
+    private String nombre, subTipo, ID;
 
     public Dependencia(String tipo, String subTipo) {
-        this.tipo = tipo;
+        this.nombre = tipo;
         this.subTipo = subTipo;
         this.ID = baseID();
     }
 
     public Dependencia(String tipo) {
-        this.tipo = tipo;
+        this.nombre = tipo;
         this.ID = baseID();
     }
 
@@ -19,8 +19,8 @@ public class Dependencia {
 
         String pref;
 
-        switch (tipo) {
-            
+        switch (nombre) {
+
             case "Facultades y Programas de Pregrado":
                 pref = "FPP_";
                 if (subTipo != null) {
@@ -57,13 +57,13 @@ public class Dependencia {
                 } else {
                     throw new RuntimeException("Error: Subtipo es requerido para \"Facultades y Programas de Pregrado\"");
                 }
-            
+
             case "Estudios de Posgrado":
                 return "POS-";
-            
+
             case "Programas de Educación Ejecutiva":
                 return "PEG-";
-            
+
             case "Oficinas Administrativas y Servicios":
                 pref = "OAS_";
                 if (subTipo != null) {
@@ -114,11 +114,11 @@ public class Dependencia {
     }
 
     public String getTipo() {
-        return tipo;
+        return nombre;
     }
 
     public void setTipo(String tipo) {
-        this.tipo = tipo;
+        this.nombre = tipo;
     }
 
     public String getSubTipo() {

@@ -1,84 +1,90 @@
 package Trámites._2_Registro;
 
+import Trámites._5_Interesados.Interesado;
+import Trámites._1_Inicio.*;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class Expediente {
-    private int id;
-    private int prioridad;
+    private Dependencia dependencia;
+    private String id;
+    private boolean prioridad;
+    private int orden;
     private Interesado datosInteresado;
     private String asunto;
     private String documentoReferencia;
-    private String fechaHoraInicio;
-    private String fechaHoraFinalizacion;
-    private ListaEnlazada<Movimiento> movimientos;
 
-    public Expediente(Interesado datosInteresado, String asunto, String documentoReferencia) {
+    public Expediente(Dependencia dependencia, boolean prioridad, Interesado datosInteresado, String asunto, String documentoReferencia) {
+        this.dependencia = dependencia;
+        this.id = id;
+        this.prioridad = prioridad;
+        this.orden = orden;
         this.datosInteresado = datosInteresado;
         this.asunto = asunto;
         this.documentoReferencia = documentoReferencia;
-        this.movimientos = new ListaEnlazada<Movimiento>();
     }
 
-    public int getId() {
+    public Dependencia getDependencia() {
+        return dependencia;
+    }
+
+    public void setDependencia(Dependencia dependencia) {
+        this.dependencia = dependencia;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setid(int id)
-    {
-        this.id=id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public int getPrioridad() {
+    public boolean isPrioridad() {
         return prioridad;
     }
 
-    public void setPrioridad(int Prioridad)
-        {
-            this.prioridad=Prioridad;
-        }
+    public void setPrioridad(boolean prioridad) {
+        this.prioridad = prioridad;
+    }
+
+    public int getOrden() {
+        return orden;
+    }
+
+    public void setOrden(int orden) {
+        this.orden = orden;
+    }
 
     public Interesado getDatosInteresado() {
         return datosInteresado;
+    }
+
+    public void setDatosInteresado(Interesado datosInteresado) {
+        this.datosInteresado = datosInteresado;
     }
 
     public String getAsunto() {
         return asunto;
     }
 
+    public void setAsunto(String asunto) {
+        this.asunto = asunto;
+    }
+
     public String getDocumentoReferencia() {
         return documentoReferencia;
     }
 
-    public String getFechaHoraInicio() {
-        return fechaHoraInicio;
+    public void setDocumentoReferencia(String documentoReferencia) {
+        this.documentoReferencia = documentoReferencia;
     }
-
-    public void setFechaHoraInicio(String fechaHoraInicio) {
-        this.fechaHoraInicio = fechaHoraInicio;
+    
+    public void ID(int num) {
+        DecimalFormat df = new DecimalFormat("0000000000");
+        
+        this.id = this.dependencia.getID() + df.format(num);
+        
     }
-
-    public String getFechaHoraFinalizacion() {
-        return fechaHoraFinalizacion;
-    }
-
-    public void setFechaHoraFinalizacion(String fechaHoraFinalizacion) {
-        this.fechaHoraFinalizacion = fechaHoraFinalizacion;
-    }
-
-    public ListaEnlazada<Movimiento> getMovimientos() {
-        return movimientos;
-    }
-
-    public void agregarMovimiento(String descripcion) {
-        Movimiento movimiento = new Movimiento(descripcion, new Date().toString());
-        movimientos.insertar(movimiento);
-    }
-
-    public void mostrarMovimientos() {
-        Nodo<Movimiento> current = movimientos.getHead();
-        while (current != null) {
-            System.out.println(current.getData());
-            current = current.getNext();
-        }
-    }
+    
 }

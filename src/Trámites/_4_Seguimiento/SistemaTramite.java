@@ -1,28 +1,32 @@
+package Trámites._4_Seguimiento;
+import TDA.*;
+import Trámites._1_Inicio.*;
+import Trámites._2_Registro.*;
 
 import java.util.Date;
 
 public class SistemaTramite {
-    private ListaEnlazada<Expediente> listaExpedientes;
+    private ListaEnlazada<Trámite> listaExpedientes;
     private ListaEnlazada<Dependencia> listaDependencias;
 
     public SistemaTramite() {
-        this.listaExpedientes = new ListaEnlazada<Expediente>();
+        this.listaExpedientes = new ListaEnlazada<Trámite>();
         this.listaDependencias = new ListaEnlazada<Dependencia>();
     }
 
-    public void registrarExpediente(Dependencia dependencia, Expediente expediente) {
-        expediente.setFechaHoraInicio(new Date().toString());
-        expediente.agregarMovimiento("Expediente registrado en " + dependencia.getNombre());
-        listaExpedientes.insertar(expediente);
-        dependencia.agregarExpediente(expediente);
+    public void registrarExpediente(Dependencia dependencia, Trámite trámite) {
+        trámite.setFechaHoraInicio(new Date().toString());
+        trámite.agregarMovimiento("Expediente registrado en " + dependencia.getTipo());
+        listaExpedientes.insertar(trámite);
+        trámite.agregarExpediente(trámite);
     }
 
     public void moverExpediente(int expedienteId, String dependenciaDestino) {
-        Nodo<Expediente> nodoExpediente = buscarExpediente(expedienteId);
+        Nodo<Trámite> nodoExpediente = buscarExpediente(expedienteId);
         Nodo<Dependencia> nodoDependencia = listaDependencias.buscar(new Dependencia(dependenciaDestino));
 
         if (nodoExpediente != null && nodoDependencia != null) {
-            Expediente expediente = nodoExpediente.getData();
+            Trámite expediente = nodoExpediente.getData();
             Dependencia nuevaDependencia = nodoDependencia.getData();
             expediente.agregarMovimiento("Expediente movido a " + nuevaDependencia.getNombre());
             nuevaDependencia.agregarExpediente(expediente);
@@ -32,18 +36,18 @@ public class SistemaTramite {
     }
 
     public void finalizarExpediente(int expedienteId) {
-        Nodo<Expediente> nodoExpediente = buscarExpediente(expedienteId);
+        Nodo<Trámite> nodoExpediente = buscarExpediente(expedienteId);
         if (nodoExpediente != null) {
-            Expediente expediente = nodoExpediente.getData();
+            Trámite expediente = nodoExpediente.getData();
             expediente.setFechaHoraFinalizacion(new Date().toString());
             expediente.agregarMovimiento("Expediente finalizado");
         }
     }
 
     public void mostrarSeguimiento(int expedienteId) {
-        Nodo<Expediente> nodoExpediente = buscarExpediente(expedienteId);
+        Nodo<Trámite> nodoExpediente = buscarExpediente(expedienteId);
         if (nodoExpediente != null) {
-            Expediente expediente = nodoExpediente.getData();
+            Trámite expediente = nodoExpediente.getData();
             System.out.println("Seguimiento del expediente " + expedienteId);
             System.out.println("Inicio: " + expediente.getFechaHoraInicio());
             System.out.println("Finalización: " + expediente.getFechaHoraFinalizacion());
@@ -51,7 +55,7 @@ public class SistemaTramite {
         }
     }
 
-    public ListaEnlazada<Expediente> getListaExpedientes() {
+    public ListaEnlazada<Trámite> getListaExpedientes() {
         return listaExpedientes;
     }
 
@@ -59,8 +63,8 @@ public class SistemaTramite {
         return listaDependencias;
     }
 
-    private Nodo<Expediente> buscarExpediente(int expedienteId) {
-        Nodo<Expediente> current = listaExpedientes.getHead();
+    private Nodo<Trámite> buscarExpediente(int expedienteId) {
+        Nodo<Trámite> current = listaExpedientes.getHead();
         while (current != null) {
             if (current.getData().getId()==expedienteId) {
                 return current;

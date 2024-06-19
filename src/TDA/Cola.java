@@ -28,11 +28,11 @@ public class Cola<T> {
 
     public void encolar(T pElemento) {
         if (esVacia() == true) {
-            Nodo<T> nuevoNodo = new Nodo(pElemento, null);
+            Nodo<T> nuevoNodo = new Nodo(pElemento);
             frente = nuevoNodo;
             ultimo = nuevoNodo;
         } else { // la cola no esta vacia
-            Nodo<T> nuevoNodo = new Nodo(pElemento, null);
+            Nodo<T> nuevoNodo = new Nodo(pElemento);
             ultimo.setNext(nuevoNodo);
             ultimo = nuevoNodo;
 

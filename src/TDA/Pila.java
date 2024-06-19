@@ -25,7 +25,7 @@ public class Pila<T> {
         if (isEmpty()) {
             top = nuevoNodo;
         } else { // la pila no esta vacia
-            nuevoNodo.getNext(top);
+            nuevoNodo.setNext(top);
             top = nuevoNodo;
         }
     }
