@@ -1,4 +1,4 @@
-package Trámites._5_Interesados;
+package Trámites._6_Roles;
 
 public abstract class Usuario {
     private String nombreUsuario;

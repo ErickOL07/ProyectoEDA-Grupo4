@@ -1,6 +1,7 @@
-package Trámites._4_Seguimiento;
+package Trámites._3_FlujoRegistro;
 
 import TDA.*;
+import Trámites._4_Seguimiento.Movimiento;
 import java.util.Date;
 
 public class Trámite {

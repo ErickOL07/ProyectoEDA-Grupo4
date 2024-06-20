@@ -58,8 +58,6 @@ public class ColaExpediente {
                 }
             } else {
                 rear.next = nuevo;
-                id++;
-                orden++;
             }
         }
         expediente.ID(id);

@@ -1,4 +1,5 @@
-package Trámites._4_Seguimiento;
+package Trámites._3_FlujoRegistro;
+import Trámites._3_FlujoRegistro.Trámite;
 import TDA.*;
 import Trámites._1_Inicio.*;
 import Trámites._2_Registro.*;
@@ -6,19 +7,29 @@ import Trámites._2_Registro.*;
 import java.util.Date;
 
 public class SistemaTramite {
-    private ListaEnlazada<Trámite> listaExpedientes;
+    private ListaEnlazada<Trámite> listaTrámites;
     private ListaEnlazada<Dependencia> listaDependencias;
+    private ColaExpediente expedientes;
 
     public SistemaTramite() {
-        this.listaExpedientes = new ListaEnlazada<Trámite>();
+        this.listaTrámites = new ListaEnlazada<Trámite>();
         this.listaDependencias = new ListaEnlazada<Dependencia>();
     }
 
-    public void registrarExpediente(Dependencia dependencia, Trámite trámite) {
+    public void registrarExpediente(Dependencia dependencia, Expediente expediente, Trámite trámite) {
         trámite.setFechaHoraInicio(new Date().toString());
         trámite.agregarMovimiento("Expediente registrado en " + dependencia.getTipo());
-        listaExpedientes.insertar(trámite);
-        trámite.agregarExpediente(trámite);
+        listaTrámites.insertar(trámite);
+        agregarExpediente(expediente);
+        
+    }
+    
+     public void agregarExpediente(Expediente expediente) {
+        expedientes.encolar(expediente);
+    }
+
+    public Expediente procesarExpediente() {
+        return expedientes.desencolar();
     }
 
     public void moverExpediente(int expedienteId, String dependenciaDestino) {
@@ -26,10 +37,10 @@ public class SistemaTramite {
         Nodo<Dependencia> nodoDependencia = listaDependencias.buscar(new Dependencia(dependenciaDestino));
 
         if (nodoExpediente != null && nodoDependencia != null) {
-            Trámite expediente = nodoExpediente.getData();
+            Expediente expediente = nodoExpediente.getData();
             Dependencia nuevaDependencia = nodoDependencia.getData();
             expediente.agregarMovimiento("Expediente movido a " + nuevaDependencia.getNombre());
-            nuevaDependencia.agregarExpediente(expediente);
+            agregarExpediente(expediente);
         } else {
             System.out.println("Expediente o dependencia no encontrados");
         }

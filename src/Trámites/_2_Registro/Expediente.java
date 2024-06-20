@@ -3,7 +3,6 @@ package Trámites._2_Registro;
 import Trámites._5_Interesados.Interesado;
 import Trámites._1_Inicio.*;
 import java.text.DecimalFormat;
-import java.util.Date;
 
 public class Expediente {
     private Dependencia dependencia;
@@ -16,9 +15,7 @@ public class Expediente {
 
     public Expediente(Dependencia dependencia, boolean prioridad, Interesado datosInteresado, String asunto, String documentoReferencia) {
         this.dependencia = dependencia;
-        this.id = id;
         this.prioridad = prioridad;
-        this.orden = orden;
         this.datosInteresado = datosInteresado;
         this.asunto = asunto;
         this.documentoReferencia = documentoReferencia;
@@ -86,5 +83,5 @@ public class Expediente {
         this.id = this.dependencia.getID() + df.format(num);
         
     }
-    
+        
 }
