@@ -1,8 +1,12 @@
 package Trámites._2_Registro;
 
+import TDA.*;
 import Trámites._5_Interesados.Interesado;
 import Trámites._1_Inicio.*;
+import Trámites._3_FlujoRegistro.*;
+import Trámites._4_Seguimiento.Movimiento;
 import java.text.DecimalFormat;
+import java.util.Date;
 
 public class Expediente {
     private Dependencia dependencia;
@@ -12,6 +16,9 @@ public class Expediente {
     private Interesado datosInteresado;
     private String asunto;
     private String documentoReferencia;
+    private Trámite trámite;
+    private ListaEnlazada<Movimiento> movimientos;
+
 
     public Expediente(Dependencia dependencia, boolean prioridad, Interesado datosInteresado, String asunto, String documentoReferencia) {
         this.dependencia = dependencia;
@@ -21,12 +28,41 @@ public class Expediente {
         this.documentoReferencia = documentoReferencia;
     }
 
+    public ListaEnlazada<Movimiento> getMovimientos() {
+        return movimientos;
+    }
+
+    public void setMovimientos(ListaEnlazada<Movimiento> movimientos) {
+        this.movimientos = movimientos;
+    }
+    
+    public void agregarMovimiento(String descripcion) {
+        Movimiento movimiento = new Movimiento(descripcion, new Date().toString());
+        movimientos.insertar(movimiento);
+    }
+
+    public void mostrarMovimientos() {
+        Nodo<Movimiento> current = movimientos.getHead();
+        while (current != null) {
+            System.out.println(current.getData());
+            current = current.getNext();
+        }
+    }
+
     public Dependencia getDependencia() {
         return dependencia;
     }
 
     public void setDependencia(Dependencia dependencia) {
         this.dependencia = dependencia;
+    }
+
+    public Trámite getTrámite() {
+        return trámite;
+    }
+
+    public void setTrámite(Trámite trámite) {
+        this.trámite = trámite;
     }
 
     public String getId() {

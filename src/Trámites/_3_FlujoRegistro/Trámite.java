@@ -1,16 +1,11 @@
 package Trámites._3_FlujoRegistro;
 
-import TDA.*;
-import Trámites._4_Seguimiento.Movimiento;
-import java.util.Date;
-
 public class Trámite {
     private String fechaHoraInicio;
     private String fechaHoraFinalizacion;
-    private ListaEnlazada<Movimiento> movimientos;
+    private String[] documento;
 
-    public Trámite(ListaEnlazada<Movimiento> movimientos) {
-        this.movimientos = movimientos;
+    public Trámite() {
     }
 
     public String getFechaHoraInicio() {
@@ -21,6 +16,14 @@ public class Trámite {
         this.fechaHoraInicio = fechaHoraInicio;
     }
 
+    public String[] getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String[] documento) {
+        this.documento = documento;
+    } 
+
     public String getFechaHoraFinalizacion() {
         return fechaHoraFinalizacion;
     }
@@ -29,24 +32,4 @@ public class Trámite {
         this.fechaHoraFinalizacion = fechaHoraFinalizacion;
     }
 
-    public ListaEnlazada<Movimiento> getMovimientos() {
-        return movimientos;
-    }
-
-    public void setMovimientos(ListaEnlazada<Movimiento> movimientos) {
-        this.movimientos = movimientos;
-    }
-    
-    public void agregarMovimiento(String descripcion) {
-        Movimiento movimiento = new Movimiento(descripcion, new Date().toString());
-        movimientos.insertar(movimiento);
-    }
-
-    public void mostrarMovimientos() {
-        Nodo<Movimiento> current = movimientos.getHead();
-        while (current != null) {
-            System.out.println(current.getData());
-            current = current.getNext();
-        }
-    }
 }

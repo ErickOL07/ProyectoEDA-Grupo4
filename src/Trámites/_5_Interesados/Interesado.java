@@ -1,6 +1,6 @@
 package Trámites._5_Interesados;
 
-import Trámites._3_FlujoRegistro.SistemaTramite;
+import Trámites._4_Seguimiento.SistemaTramite;
 import Trámites._6_Roles.Usuario;
 import Trámites._4_Seguimiento.*;
 

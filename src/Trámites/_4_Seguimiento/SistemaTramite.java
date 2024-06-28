@@ -1,8 +1,9 @@
-package Trámites._3_FlujoRegistro;
-import Trámites._3_FlujoRegistro.Trámite;
+package Trámites._4_Seguimiento;
+
 import TDA.*;
 import Trámites._1_Inicio.*;
 import Trámites._2_Registro.*;
+import Trámites._3_FlujoRegistro.*;
 
 import java.util.Date;
 
@@ -18,8 +19,13 @@ public class SistemaTramite {
 
     public void registrarExpediente(Dependencia dependencia, Expediente expediente, Trámite trámite) {
         trámite.setFechaHoraInicio(new Date().toString());
-        trámite.agregarMovimiento("Expediente registrado en " + dependencia.getTipo());
+        if(dependencia.getSubTipo() != null) {
+            expediente.agregarMovimiento("Expediente registrado en " + dependencia.getTipo() + ", " + dependencia.getSubTipo());
+        } else {
+            expediente.agregarMovimiento("Expediente registrado en " + dependencia.getTipo());
+        }
         listaTrámites.insertar(trámite);
+        expediente.setTrámite(trámite);
         agregarExpediente(expediente);
         
     }
@@ -33,10 +39,10 @@ public class SistemaTramite {
     }
 
     public void moverExpediente(int expedienteId, String dependenciaDestino) {
-        Nodo<Trámite> nodoExpediente = buscarExpediente(expedienteId);
+        expedientes. nodoTrámite = buscarExpediente(expedienteId);
         Nodo<Dependencia> nodoDependencia = listaDependencias.buscar(new Dependencia(dependenciaDestino));
 
-        if (nodoExpediente != null && nodoDependencia != null) {
+        if (nodoTrámite != null && nodoDependencia != null) {
             Expediente expediente = nodoExpediente.getData();
             Dependencia nuevaDependencia = nodoDependencia.getData();
             expediente.agregarMovimiento("Expediente movido a " + nuevaDependencia.getNombre());
