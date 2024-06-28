@@ -1,10 +1,10 @@
 package Trámites._2_Registro;
 
 import TDA.*;
-import Trámites._5_Interesados.Interesado;
 import Trámites._1_Inicio.*;
 import Trámites._3_FlujoRegistro.*;
 import Trámites._4_Seguimiento.Movimiento;
+import Trámites._5_Interesados.Interesado;
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -41,12 +41,14 @@ public class Expediente {
         movimientos.insertar(movimiento);
     }
 
-    public void mostrarMovimientos() {
+    public String mostrarMovimientos() {
         Nodo<Movimiento> current = movimientos.getHead();
+        String movs = "";
         while (current != null) {
-            System.out.println(current.getData());
+            movs += current.getData();
             current = current.getNext();
         }
+        return movs;
     }
 
     public Dependencia getDependencia() {

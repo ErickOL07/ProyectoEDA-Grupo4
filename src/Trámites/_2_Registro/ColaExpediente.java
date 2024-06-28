@@ -75,4 +75,21 @@ public class ColaExpediente {
         }
         return expediente;
     }
+
+    public Expediente buscarExpediente(String expedienteId) {
+        ColaExpediente aux = new ColaExpediente();
+        Expediente buscado = null;
+        while (!this.estaVacia()) {
+            Expediente M = this.desencolar();
+            aux.encolar(M);
+            if (M.getId() == expedienteId) {
+                buscado = M;
+            }
+        }
+        while(!aux.estaVacia()){
+            this.encolar(aux.desencolar());
+        }
+        return buscado;
+    }
+
 }

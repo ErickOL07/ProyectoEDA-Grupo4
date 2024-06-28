@@ -17,13 +17,17 @@ public class SistemaTramite {
         this.listaDependencias = new ListaEnlazada<Dependencia>();
     }
 
+    private String nombreDependencia(Dependencia dependencia) {
+        if (dependencia.getSubTipo() == null) {
+            return dependencia.getTipo();
+        } else {
+            return dependencia.getTipo() + ", " + dependencia.getSubTipo();
+        }
+    }
+
     public void registrarExpediente(Dependencia dependencia, Expediente expediente, Trámite trámite) {
         trámite.setFechaHoraInicio(new Date().toString());
-        if(dependencia.getSubTipo() != null) {
-            expediente.agregarMovimiento("Expediente registrado en " + dependencia.getTipo() + ", " + dependencia.getSubTipo());
-        } else {
-            expediente.agregarMovimiento("Expediente registrado en " + dependencia.getTipo());
-        }
+        expediente.agregarMovimiento(new Date().toString() + " | Expediente registrado en " + nombreDependencia(dependencia));
         listaTrámites.insertar(trámite);
         expediente.setTrámite(trámite);
         agregarExpediente(expediente);
@@ -38,56 +42,60 @@ public class SistemaTramite {
         return expedientes.desencolar();
     }
 
-    public void moverExpediente(int expedienteId, String dependenciaDestino) {
-        expedientes. nodoTrámite = buscarExpediente(expedienteId);
-        Nodo<Dependencia> nodoDependencia = listaDependencias.buscar(new Dependencia(dependenciaDestino));
-
-        if (nodoTrámite != null && nodoDependencia != null) {
-            Expediente expediente = nodoExpediente.getData();
-            Dependencia nuevaDependencia = nodoDependencia.getData();
-            expediente.agregarMovimiento("Expediente movido a " + nuevaDependencia.getNombre());
-            agregarExpediente(expediente);
+    public void moverExpediente(String expedienteId, Dependencia dependenciaDestino) {
+        Expediente expediente = expedientes.buscarExpediente(expedienteId);
+        if (expediente != null) {
+            expediente.agregarMovimiento(new Date().toString() + " | Se transfirió el trámite de \"" + nombreDependencia(expediente.getDependencia()) + "\" a \"" + nombreDependencia(dependenciaDestino));
+            expediente.setDependencia(dependenciaDestino);
         } else {
-            System.out.println("Expediente o dependencia no encontrados");
+            throw new RuntimeException("Error: El expediente \"" + expedienteId + "\" no fue encontrado.");
         }
     }
 
-    public void finalizarExpediente(int expedienteId) {
-        Nodo<Trámite> nodoExpediente = buscarExpediente(expedienteId);
-        if (nodoExpediente != null) {
-            Trámite expediente = nodoExpediente.getData();
-            expediente.setFechaHoraFinalizacion(new Date().toString());
-            expediente.agregarMovimiento("Expediente finalizado");
+    public void finalizarExpediente(String expedienteId) {
+        Expediente expediente = expedientes.buscarExpediente(expedienteId);
+        if (expediente != null) { 
+            Trámite trámite = expediente.getTrámite();
+            trámite.setFechaHoraFinalizacion(new Date().toString());
+            expediente.agregarMovimiento(new Date().toString() + " | Expediente finalizado");
+        } else {
+            throw new RuntimeException("Error: El expediente \"" + expedienteId + "\" no fue encontrado.");
         }
     }
 
-    public void mostrarSeguimiento(int expedienteId) {
-        Nodo<Trámite> nodoExpediente = buscarExpediente(expedienteId);
-        if (nodoExpediente != null) {
-            Trámite expediente = nodoExpediente.getData();
-            System.out.println("Seguimiento del expediente " + expedienteId);
-            System.out.println("Inicio: " + expediente.getFechaHoraInicio());
-            System.out.println("Finalización: " + expediente.getFechaHoraFinalizacion());
-            expediente.mostrarMovimientos();
+    public void mostrarSeguimiento(String expedienteId) {
+        Expediente expediente = expedientes.buscarExpediente(expedienteId);
+        if (expediente != null) { 
+            Trámite trámite = expediente.getTrámite();
+            System.out.println("Seguimiento del expediente " + expedienteId +
+                               ":\n" + expediente.mostrarMovimientos());
+        } else {
+            throw new RuntimeException("Error: El expediente \"" + expedienteId + "\" no fue encontrado.");
         }
     }
 
-    public ListaEnlazada<Trámite> getListaExpedientes() {
-        return listaExpedientes;
+    public ListaEnlazada<Trámite> getListaTrámites() {
+        return listaTrámites;
+    }
+
+    public void setListaTrámites(ListaEnlazada<Trámite> listaTrámites) {
+        this.listaTrámites = listaTrámites;
     }
 
     public ListaEnlazada<Dependencia> getListaDependencias() {
         return listaDependencias;
     }
 
-    private Nodo<Trámite> buscarExpediente(int expedienteId) {
-        Nodo<Trámite> current = listaExpedientes.getHead();
-        while (current != null) {
-            if (current.getData().getId()==expedienteId) {
-                return current;
-            }
-            current = current.getNext();
-        }
-        return null;
+    public void setListaDependencias(ListaEnlazada<Dependencia> listaDependencias) {
+        this.listaDependencias = listaDependencias;
     }
+
+    public ColaExpediente getExpedientes() {
+        return expedientes;
+    }
+
+    public void setExpedientes(ColaExpediente expedientes) {
+        this.expedientes = expedientes;
+    }
+
 }

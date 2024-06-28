@@ -2,7 +2,6 @@ package Trámites._5_Interesados;
 
 import Trámites._4_Seguimiento.SistemaTramite;
 import Trámites._6_Roles.Usuario;
-import Trámites._4_Seguimiento.*;
 
 public class Interesado extends Usuario {
 
@@ -10,7 +9,7 @@ public class Interesado extends Usuario {
         super(nombreUsuario, contraseña);
     }
 
-    public void verSeguimiento(int expedienteId, SistemaTramite sistema) {
+    public void verSeguimiento(String expedienteId, SistemaTramite sistema) {
         sistema.mostrarSeguimiento(expedienteId);
     }
 
