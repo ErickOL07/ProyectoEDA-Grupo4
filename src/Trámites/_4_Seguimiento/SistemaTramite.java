@@ -4,17 +4,20 @@ import TDA.*;
 import Trámites._1_Inicio.*;
 import Trámites._2_Registro.*;
 import Trámites._3_FlujoRegistro.*;
+import Trámites._5_Interesados.*;
 
 import java.util.Date;
 
 public class SistemaTramite {
-    private ListaEnlazada<Trámite> listaTrámites;
+    public ListaEnlazada<Trámite> listaTrámites;
+    public ListaEnlazada<Expediente> listaExpedientes;
     private ListaEnlazada<Dependencia> listaDependencias;
     private ColaExpediente expedientes;
 
     public SistemaTramite() {
         this.listaTrámites = new ListaEnlazada<Trámite>();
         this.listaDependencias = new ListaEnlazada<Dependencia>();
+        this.expedientes = new ColaExpediente(); 
     }
 
     private String nombreDependencia(Dependencia dependencia) {
@@ -27,8 +30,9 @@ public class SistemaTramite {
 
     public void registrarExpediente(Dependencia dependencia, Expediente expediente, Trámite trámite) {
         trámite.setFechaHoraInicio(new Date().toString());
-        expediente.agregarMovimiento(new Date().toString() + " | Expediente registrado en " + nombreDependencia(dependencia));
+        expediente.agregarMovimiento("Expediente registrado en " + nombreDependencia(dependencia));
         listaTrámites.insertar(trámite);
+        listaExpedientes.insertar(expediente);
         expediente.setTrámite(trámite);
         agregarExpediente(expediente);
         
@@ -45,7 +49,7 @@ public class SistemaTramite {
     public void moverExpediente(String expedienteId, Dependencia dependenciaDestino) {
         Expediente expediente = expedientes.buscarExpediente(expedienteId);
         if (expediente != null) {
-            expediente.agregarMovimiento(new Date().toString() + " | Se transfirió el trámite de \"" + nombreDependencia(expediente.getDependencia()) + "\" a \"" + nombreDependencia(dependenciaDestino));
+            expediente.agregarMovimiento("Se transfirió el trámite de \"" + nombreDependencia(expediente.getDependencia()) + "\" a \"" + nombreDependencia(dependenciaDestino));
             expediente.setDependencia(dependenciaDestino);
         } else {
             throw new RuntimeException("Error: El expediente \"" + expedienteId + "\" no fue encontrado.");
@@ -57,23 +61,23 @@ public class SistemaTramite {
         if (expediente != null) { 
             Trámite trámite = expediente.getTrámite();
             trámite.setFechaHoraFinalizacion(new Date().toString());
-            expediente.agregarMovimiento(new Date().toString() + " | Expediente finalizado");
+            expediente.agregarMovimiento("Expediente finalizado");
         } else {
             throw new RuntimeException("Error: El expediente \"" + expedienteId + "\" no fue encontrado.");
         }
+        this.expedientes.desencolar();
     }
 
     public void mostrarSeguimiento(String expedienteId) {
         Expediente expediente = expedientes.buscarExpediente(expedienteId);
         if (expediente != null) { 
-            Trámite trámite = expediente.getTrámite();
             System.out.println("Seguimiento del expediente " + expedienteId +
                                ":\n" + expediente.mostrarMovimientos());
         } else {
             throw new RuntimeException("Error: El expediente \"" + expedienteId + "\" no fue encontrado.");
         }
     }
-
+ 
     public ListaEnlazada<Trámite> getListaTrámites() {
         return listaTrámites;
     }
@@ -90,6 +94,14 @@ public class SistemaTramite {
         this.listaDependencias = listaDependencias;
     }
 
+    public ListaEnlazada<Expediente> getListaExpedientes() {
+        return listaExpedientes;
+    }
+
+    public void setListaExpedientes(ListaEnlazada<Expediente> listaExpedientes) {
+        this.listaExpedientes = listaExpedientes;
+    }
+    
     public ColaExpediente getExpedientes() {
         return expedientes;
     }

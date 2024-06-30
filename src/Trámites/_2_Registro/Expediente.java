@@ -4,7 +4,7 @@ import TDA.*;
 import Trámites._1_Inicio.*;
 import Trámites._3_FlujoRegistro.*;
 import Trámites._4_Seguimiento.Movimiento;
-import Trámites._5_Interesados.Interesado;
+import Trámites._5_Interesados.Usuario;
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -13,19 +13,19 @@ public class Expediente {
     private String id;
     private boolean prioridad;
     private int orden;
-    private Interesado datosInteresado;
+    private Usuario datosInteresado;
     private String asunto;
     private String documentoReferencia;
     private Trámite trámite;
     private ListaEnlazada<Movimiento> movimientos;
 
-
-    public Expediente(Dependencia dependencia, boolean prioridad, Interesado datosInteresado, String asunto, String documentoReferencia) {
+    public Expediente(Dependencia dependencia, boolean prioridad, Usuario datosInteresado, String asunto, String documentoReferencia) {
         this.dependencia = dependencia;
         this.prioridad = prioridad;
         this.datosInteresado = datosInteresado;
         this.asunto = asunto;
         this.documentoReferencia = documentoReferencia;
+        this.movimientos = new ListaEnlazada<>();
     }
 
     public ListaEnlazada<Movimiento> getMovimientos() {
@@ -91,11 +91,11 @@ public class Expediente {
         this.orden = orden;
     }
 
-    public Interesado getDatosInteresado() {
+    public Usuario getDatosInteresado() {
         return datosInteresado;
     }
 
-    public void setDatosInteresado(Interesado datosInteresado) {
+    public void setDatosInteresado(Usuario datosInteresado) {
         this.datosInteresado = datosInteresado;
     }
 

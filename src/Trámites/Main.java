@@ -1,40 +1,66 @@
+/*
 package Trámites;
 
+import Trámites._1_Inicio.*;
+import Trámites._2_Registro.*;
+import Trámites._3_FlujoRegistro.*;
+import Trámites._4_Seguimiento.*;
+import Trámites._6_Roles.Usuario;
 
 public class Main {
-  public static void main(String[] args) {
-    SistemaTramite sistema = new SistemaTramite();
-    Dependencia dep1 = new Dependencia("Dependencia 1");
-    Dependencia dep2 = new Dependencia("Dependencia 2");
-    Dependencia dep3 = new Dependencia("Dependencia 3");
-    sistema.getListaDependencias().insertar(dep1);
-    sistema.getListaDependencias().insertar(dep2);
-    sistema.getListaDependencias().insertar(dep3);
-    Interesado one = new Interesado("one", "one");
-    Interesado two = new Interesado("two", "two");
 
-    Expediente expediente1 = new Expediente(one, "Asunto 1", "Documento referencia 1");
-    Expediente expediente2 = new Expediente(two, "Asunto 2", "Documento referencia 2");
-    PersonalDependencia personalDep1 = new PersonalDependencia("personal1", "password1", dep1);
-    PersonalDependencia personalDep2 = new PersonalDependencia("personal2", "password2", dep2);
+    public static void main(String[] args) {
+        // Crear dependencias
+        Dependencia dependencia1 = new Dependencia("Facultades y Programas de Pregrado", "Ingeniería de Sistemas");
+        Dependencia dependencia2 = new Dependencia("Oficinas Administrativas y Servicios", "Biblioteca");
 
-    personalDep1.registrarIngresoExpediente(expediente1, sistema);
-    personalDep1.registrarIngresoExpediente(expediente2, sistema);
-    
+        // Crear interesado
+        Usuario interesado = new Usuario("usuario123", "password");
 
-    System.out.println(sistema.getListaDependencias().getHead().getData().getNombre());
-    System.out.println(sistema.getListaExpedientes().getHead().getData().getAsunto());
+        // Crear expediente
+        Expediente expediente = new Expediente(dependencia1, true, interesado, "Asunto del trámite", "Documento de referencia");
 
-    System.out.println(sistema.getListaExpedientes().getHead().getData().getDocumentoReferencia());
-    System.out.println("Id del primer expediente a a atender: "+sistema.getListaExpedientes().getHead().getData().getId());
-    System.out.println("Prioridad del primer expediente a a atender: "+sistema.getListaExpedientes().getHead().getData().getPrioridad());
+        // Crear sistema de trámite
+        SistemaTramite sistema = new SistemaTramite();
 
-    
-one.verSeguimiento(1, sistema);
-    personalDep1.registrarFinalizacionExpediente(1, sistema);
+        // Registrar expediente
+        Trámite trámite = new Trámite();
+        sistema.registrarExpediente(dependencia1, expediente, trámite);
 
-    one.verSeguimiento(1, sistema);
-  }
-  
-  
+        // Mostrar seguimiento inicial
+        interesado.verSeguimiento(expediente.getId(), sistema);
+
+        // Mover expediente a otra dependencia
+        sistema.moverExpediente(expediente.getId(), dependencia2);
+
+        // Mostrar seguimiento después de mover expediente
+        interesado.verSeguimiento(expediente.getId(), sistema);
+
+        // Finalizar expediente
+        sistema.finalizarExpediente(expediente.getId());
+
+        // Mostrar seguimiento final
+        interesado.verSeguimiento(expediente.getId(), sistema);
+
+        // Procesar expediente
+        Expediente procesado = sistema.procesarExpediente();
+        if (procesado != null) {
+            System.out.println("Expediente procesado: " + procesado.getId());
+        } else {
+            System.out.println("No hay expedientes en la cola para procesar.");
+        }
+
+        // Crear otra prueba de expediente con prioridad normal
+        Expediente expediente2 = new Expediente(dependencia2, false, interesado, "Otro Asunto", "Otro Documento");
+        sistema.registrarExpediente(dependencia2, expediente2, trámite);
+        
+        // Mostrar seguimiento del nuevo expediente
+        interesado.verSeguimiento(expediente2.getId(), sistema);
+        
+        // Mostrar estado final del sistema
+        System.out.println("Trámites registrados: " + sistema.getListaTrámites().contar());
+        System.out.println("Dependencias registradas: " + sistema.getListaDependencias().contar());
+    }
 }
+
+*/

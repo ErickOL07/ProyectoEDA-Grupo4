@@ -15,10 +15,12 @@ public class ColaExpediente {
 
     private NodoCola front;
     private NodoCola rear;
+    private int id;
 
     public ColaExpediente() {
         this.front = null;
         this.rear = null;
+        this.id = 1;
     }
 
     public boolean estaVacia() {
@@ -26,42 +28,36 @@ public class ColaExpediente {
     }
 
     public void encolar(Expediente expediente) {
-        int id = 0;
-        int orden = 0;
         NodoCola nuevo = new NodoCola(expediente);
-
+        
         if (estaVacia()) {
             front = nuevo;
             rear = nuevo;
-            id++;
-            orden++;
         } else {
             if (expediente.isPrioridad()) {
-                if (!rear.expediente.isPrioridad()) {
-                    NodoCola temp = front;
-                    NodoCola prev = null;
+                NodoCola temp = front;
+                NodoCola prev = null;
 
-                    while (temp != null && temp.expediente.isPrioridad()) {
-                        prev = temp;
-                        temp = temp.next;
-                    }
-                    if (prev == null) {
-                        nuevo.next = front;
-                        front = nuevo;
-                    } else {
-                        nuevo.next = temp;
-                        prev.next = nuevo;
-                    }
-                    if (temp == null) {
-                        rear = nuevo;
-                    }
+                while (temp != null && temp.expediente.isPrioridad()) {
+                    prev = temp;
+                    temp = temp.next;
+                }
+                if (prev == null) {
+                    nuevo.next = front;
+                    front = nuevo;
+                } else {
+                    nuevo.next = temp;
+                    prev.next = nuevo;
+                }
+                if (temp == null) {
+                    rear = nuevo;
                 }
             } else {
                 rear.next = nuevo;
+                rear = nuevo;
             }
         }
-        expediente.ID(id);
-        expediente.setOrden(orden);
+        expediente.ID(id++);
     }
 
     public Expediente desencolar() {
@@ -77,19 +73,14 @@ public class ColaExpediente {
     }
 
     public Expediente buscarExpediente(String expedienteId) {
-        ColaExpediente aux = new ColaExpediente();
-        Expediente buscado = null;
-        while (!this.estaVacia()) {
-            Expediente M = this.desencolar();
-            aux.encolar(M);
-            if (M.getId() == expedienteId) {
-                buscado = M;
+        NodoCola current = front;
+        while (current != null) {
+            if (current.expediente.getId().equals(expedienteId)) {
+                return current.expediente;
             }
+            current = current.next;
         }
-        while(!aux.estaVacia()){
-            this.encolar(aux.desencolar());
-        }
-        return buscado;
+        return null;
     }
 
 }

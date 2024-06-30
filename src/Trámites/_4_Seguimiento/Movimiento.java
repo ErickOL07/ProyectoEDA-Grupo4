@@ -22,6 +22,6 @@ public class Movimiento {
 
     @Override
     public String toString() {
-        return fecha + ": " + descripcion;
+        return fecha + " | " + descripcion + "\n";
     }
 }

@@ -61,5 +61,15 @@ public class ListaEnlazada<T> {
     public Nodo<T> getHead() {
         return head;
     }
+    
+    public int contar() {
+        int c = 0;
+        Nodo<T> current = head;
+        while (current != null) {
+            c++;
+            current = current.getNext();
+        }
+        return c;
+    }
 
 }
