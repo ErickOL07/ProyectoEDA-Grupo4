@@ -24,7 +24,6 @@ public class Admin extends Usuario {
             lista.insertar(dependencia);
         } else {
             JOptionPane.showMessageDialog(null, "Error: Dependencia con características repetidas.", "Error", JOptionPane.ERROR_MESSAGE);
-            throw new RuntimeException("Error: Dependencia con características repetidas.");
         }
     }
 

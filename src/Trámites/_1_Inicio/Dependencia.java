@@ -1,9 +1,5 @@
 package Trámites._1_Inicio;
 
-import javax.swing.JOptionPane;
-import TDA.ListaEnlazada;
-import TDA.Nodo;
-
 public class Dependencia {
 
     private String nombre, subTipo, ID;
@@ -37,5 +33,20 @@ public class Dependencia {
 
     public String getID() {
         return ID;
+    }
+    
+    @Override
+    public String toString() {
+        
+        if (this.subTipo != null) {
+            
+            return this.nombre + ", " + this.subTipo;
+            
+        } else {
+            
+            return this.nombre;
+            
+        }
+        
     }
 }

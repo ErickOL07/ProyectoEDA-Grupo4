@@ -84,4 +84,11 @@ public class Persona extends Usuario {
         this.DNI = DNI;
     }
     
+    @Override
+    public String toString() {
+        
+        return this.Apellido + ", " + this.Nombre + " (" + this.DNI + ")";
+        
+    }
+    
 }

@@ -1,11 +1,19 @@
 package Trámites._3_FlujoRegistro;
 
+import TDA.*;
+
 public class Trámite {
     private String fechaHoraInicio;
     private String fechaHoraFinalizacion;
-    private String[] documento;
+    private ListaEnlazada documento;
 
     public Trámite() {
+    }
+    
+    public void adjuntarDocumento(String documento) {
+        
+        this.documento.insertar(documento);
+        
     }
 
     public String getFechaHoraInicio() {
@@ -16,13 +24,13 @@ public class Trámite {
         this.fechaHoraInicio = fechaHoraInicio;
     }
 
-    public String[] getDocumento() {
+    public ListaEnlazada getDocumento() {
         return documento;
     }
 
-    public void setDocumento(String[] documento) {
+    public void setDocumento(ListaEnlazada documento) {
         this.documento = documento;
-    } 
+    }
 
     public String getFechaHoraFinalizacion() {
         return fechaHoraFinalizacion;

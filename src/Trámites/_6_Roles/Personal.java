@@ -21,11 +21,9 @@ public class Personal extends Usuario {
         this.DependenciaID = DependenciaID;
     }
 
-    
-    
     public void registrarIngresoExpediente(SistemaTramite sistema, Expediente expediente) {
         
-        if (expediente.getDependencia().getID() == this.DependenciaID) {
+        if (expediente.getDependencia().getID().equals(this.DependenciaID)) {
             
             sistema.agregarExpediente(expediente);
             
@@ -38,7 +36,7 @@ public class Personal extends Usuario {
     
     public void registrarMovimientoExpediente(SistemaTramite sistema, String ID, Dependencia dependenciaDestino) {
         
-        if (sistema.getExpedientes().buscarExpediente(ID).getDependencia().getID() == this.DependenciaID) {
+        if (sistema.getExpedientes().buscarExpediente(ID).getDependencia().getID().equals(this.DependenciaID)) {
             
             sistema.moverExpediente(ID, dependenciaDestino);
             
@@ -52,7 +50,7 @@ public class Personal extends Usuario {
     
     public void registrarFinalizaciónExpediente(SistemaTramite sistema, String ID) {
         
-        if (sistema.getExpedientes().buscarExpediente(ID).getDependencia().getID() == this.DependenciaID) {
+        if (sistema.getExpedientes().buscarExpediente(ID).getDependencia().getID().equals(this.DependenciaID)) {
             
             sistema.finalizarExpediente(ID);
             
@@ -87,6 +85,12 @@ public class Personal extends Usuario {
         this.DNI = DNI;
     }
 
-    
+    public String getDependenciaID() {
+        return DependenciaID;
+    }
+
+    public void setDependenciaID(String DependenciaID) {
+        this.DependenciaID = DependenciaID;
+    }
     
 }

@@ -4,9 +4,9 @@ import TDA.*;
 import Trámites._1_Inicio.*;
 import Trámites._2_Registro.*;
 import Trámites._3_FlujoRegistro.*;
-import Trámites._5_Interesados.*;
 
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 public class SistemaTramite {
     public ListaEnlazada<Trámite> listaTrámites;
@@ -31,6 +31,7 @@ public class SistemaTramite {
     public void registrarExpediente(Dependencia dependencia, Expediente expediente, Trámite trámite) {
         trámite.setFechaHoraInicio(new Date().toString());
         expediente.agregarMovimiento("Expediente registrado en " + nombreDependencia(dependencia));
+        trámite.adjuntarDocumento(expediente.getDocumentoReferencia());
         listaTrámites.insertar(trámite);
         listaExpedientes.insertar(expediente);
         expediente.setTrámite(trámite);
@@ -52,7 +53,7 @@ public class SistemaTramite {
             expediente.agregarMovimiento("Se transfirió el trámite de \"" + nombreDependencia(expediente.getDependencia()) + "\" a \"" + nombreDependencia(dependenciaDestino));
             expediente.setDependencia(dependenciaDestino);
         } else {
-            throw new RuntimeException("Error: El expediente \"" + expedienteId + "\" no fue encontrado.");
+            JOptionPane.showMessageDialog(null, "Error: El expediente \"" + expedienteId + "\" no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -63,7 +64,7 @@ public class SistemaTramite {
             trámite.setFechaHoraFinalizacion(new Date().toString());
             expediente.agregarMovimiento("Expediente finalizado");
         } else {
-            throw new RuntimeException("Error: El expediente \"" + expedienteId + "\" no fue encontrado.");
+            JOptionPane.showMessageDialog(null, "Error: El expediente \"" + expedienteId + "\" no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
         }
         this.expedientes.desencolar();
     }
@@ -74,7 +75,7 @@ public class SistemaTramite {
             System.out.println("Seguimiento del expediente " + expedienteId +
                                ":\n" + expediente.mostrarMovimientos());
         } else {
-            throw new RuntimeException("Error: El expediente \"" + expedienteId + "\" no fue encontrado.");
+            JOptionPane.showMessageDialog(null, "Error: El expediente \"" + expedienteId + "\" no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
  

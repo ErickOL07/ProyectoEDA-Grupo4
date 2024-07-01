@@ -61,5 +61,12 @@ public class Institución extends Usuario {
     public void setNombre(String Nombre) {
         this.Nombre = Nombre;
     }
+    
+    @Override
+    public String toString() {
+        
+        return this.Nombre;
+        
+    }
 
 }
