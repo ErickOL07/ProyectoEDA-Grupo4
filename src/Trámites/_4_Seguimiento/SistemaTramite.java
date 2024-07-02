@@ -56,6 +56,19 @@ public class SistemaTramite {
             JOptionPane.showMessageDialog(null, "Error: El expediente \"" + expedienteId + "\" no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    public void agregarDocumento(String expedienteId, String documento) {
+        
+        Expediente expediente = expedientes.buscarExpediente(expedienteId);
+        if (expediente != null) { 
+            Trámite trámite = expediente.getTrámite();
+            trámite.adjuntarDocumento(documento);
+            expediente.agregarMovimiento(expediente.getDependencia().toString() + ": Se adjuntó \"" + documento + "\"");
+        } else {
+            JOptionPane.showMessageDialog(null, "Error: El expediente \"" + expedienteId + "\" no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
 
     public void finalizarExpediente(String expedienteId) {
         Expediente expediente = expedientes.buscarExpediente(expedienteId);

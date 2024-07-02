@@ -8,6 +8,7 @@ import java.awt.Desktop;
 import java.net.URI;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Acceso extends javax.swing.JFrame {
@@ -81,6 +82,24 @@ public class Acceso extends javax.swing.JFrame {
             // Institución
             listaUsuarios.insertar(new Institución("USB", "USB@ucv.edu.pe", "paolo"));
         
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
+    public ListaEnlazada<Dependencia> getListaDependencias() {
+        return listaDependencias;
+    }
+
+    public void setListaDependencias(ListaEnlazada<Dependencia> listaDependencias) {
+        this.listaDependencias = listaDependencias;
+    }
+
+    public ListaEnlazada<Usuario> getListaUsuarios() {
+        return listaUsuarios;
+    }
+
+    public void setListaUsuarios(ListaEnlazada<Usuario> listaUsuarios) {
+        this.listaUsuarios = listaUsuarios;
     }
     
     private void agregarEventos() {
@@ -119,13 +138,31 @@ public class Acceso extends javax.swing.JFrame {
         });
     }
     
+    public Usuario usuarioActual() {
+        
+        String correo = IngresarCorreo.getText();
+        String contraseña = IngresarContraseña.getText();
+
+        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        while (ptr != null) {
+            Usuario usuario = ptr.getData();
+            if (usuario.getNombreUsuario().equals(correo) && usuario.getContraseña().equals(contraseña)) {
+                return usuario;
+                } 
+            ptr = ptr.getNext();
+            }
+        return null;
+    }
+        
+
+    
     private void verificarCredenciales() {
         String correo = IngresarCorreo.getText();
         String contraseña = IngresarContraseña.getText();
 
-        Nodo<Usuario> current = listaUsuarios.getHead();
-        while (current != null) {
-            Usuario usuario = current.getData();
+        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        while (ptr != null) {
+            Usuario usuario = ptr.getData();
             if (usuario.getNombreUsuario().equals(correo) && usuario.getContraseña().equals(contraseña)) {
                 if (usuario instanceof Admin) {
                     JOptionPane.showMessageDialog(null, "Hola, " + ((Admin) usuario).getNombre());
@@ -135,15 +172,15 @@ public class Acceso extends javax.swing.JFrame {
                     new VistaPersonal().setVisible(true);
                 } else if (usuario instanceof Persona) {
                     JOptionPane.showMessageDialog(null, "Hola, " + ((Persona) usuario).getNombre());
-                    new VistaInteresado().setVisible(true);
+                    new VistaInteresado(this).setVisible(true);
                 } else if (usuario instanceof Institución) {
                     JOptionPane.showMessageDialog(null, "Hola, " + ((Institución) usuario).getNombre());
-                    new VistaInteresado().setVisible(true);
+                    new VistaInteresado(this).setVisible(true);
                 }
                 this.dispose();
                 return;
             }
-            current = current.getNext();
+            ptr = ptr.getNext();
         }
     JOptionPane.showMessageDialog(null, "El usuario y/o contraseña ingresados no son correctos.");
     }
@@ -160,15 +197,16 @@ public class Acceso extends javax.swing.JFrame {
         InicioUniversidadDeLima = new javax.swing.JLabel();
         ComunícateConNosotros = new javax.swing.JLabel();
         Contenido = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        IngresarContraseña = new javax.swing.JTextField();
         IngresarCorreo = new javax.swing.JTextField();
         INGRESAR = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         Registrarse = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        IngresarContraseña = new javax.swing.JPasswordField();
+        jLabel6 = new javax.swing.JLabel();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -197,7 +235,7 @@ public class Acceso extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EncabezadoLayout.createSequentialGroup()
-                .addContainerGap(923, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(ComunícateConNosotros)
                 .addGap(133, 133, 133)
                 .addComponent(InicioUniversidadDeLima)
@@ -217,8 +255,6 @@ public class Acceso extends javax.swing.JFrame {
 
         Contenido.setBackground(new java.awt.Color(0, 0, 0));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/ImagenBlackboard.png"))); // NOI18N
-
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(204, 204, 204));
         jLabel4.setText("Contraseña");
@@ -226,13 +262,6 @@ public class Acceso extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(204, 204, 204));
         jLabel5.setText("Usuario");
-
-        IngresarContraseña.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        IngresarContraseña.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarContraseñaActionPerformed(evt);
-            }
-        });
 
         IngresarCorreo.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         IngresarCorreo.addActionListener(new java.awt.event.ActionListener() {
@@ -252,56 +281,82 @@ public class Acceso extends javax.swing.JFrame {
         Registrarse.setForeground(new java.awt.Color(102, 102, 102));
         Registrarse.setText("Registrarse");
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/ImagenBlackboard.png"))); // NOI18N
+
+        IngresarContraseña.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        IngresarContraseña.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IngresarContraseñaActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel6.setText("Iniciar sesión");
+
         javax.swing.GroupLayout ContenidoLayout = new javax.swing.GroupLayout(Contenido);
         Contenido.setLayout(ContenidoLayout);
         ContenidoLayout.setHorizontalGroup(
             ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ContenidoLayout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
                 .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ContenidoLayout.createSequentialGroup()
-                        .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(INGRESAR)
-                            .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(ContenidoLayout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addGap(108, 108, 108)
-                                    .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(ContenidoLayout.createSequentialGroup()
-                                    .addComponent(jLabel5)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(Registrarse))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
-                        .addGap(0, 739, Short.MAX_VALUE)
                         .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addContainerGap())))))
+                            .addGroup(ContenidoLayout.createSequentialGroup()
+                                .addGap(108, 108, 108)
+                                .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(INGRESAR)
+                                    .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(ContenidoLayout.createSequentialGroup()
+                                            .addComponent(jLabel5)
+                                            .addGap(173, 173, 173)
+                                            .addComponent(IngresarCorreo))
+                                        .addGroup(ContenidoLayout.createSequentialGroup()
+                                            .addComponent(jLabel4)
+                                            .addGap(108, 108, 108)
+                                            .addComponent(IngresarContraseña)))
+                                    .addComponent(Registrarse)))
+                            .addGroup(ContenidoLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel7)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel6)
+                        .addGap(237, 237, 237)))
+                .addComponent(jLabel2))
         );
         ContenidoLayout.setVerticalGroup(
             ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ContenidoLayout.createSequentialGroup()
-                .addComponent(jLabel2)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 788, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(ContenidoLayout.createSequentialGroup()
-                .addGap(287, 287, 287)
-                .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
-                .addComponent(jLabel3)
-                .addGap(41, 41, 41)
+                .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
+                        .addGap(105, 105, 105)
+                        .addComponent(jLabel6)
+                        .addGap(101, 101, 101)
+                        .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addGroup(ContenidoLayout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(IngresarCorreo)))
+                        .addGap(101, 101, 101))
+                    .addGroup(ContenidoLayout.createSequentialGroup()
+                        .addGap(392, 392, 392)
+                        .addComponent(jLabel3)
+                        .addGap(7, 7, 7)))
                 .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
                 .addComponent(INGRESAR)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Registrarse)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(204, 204, 204)
                 .addComponent(jLabel7)
                 .addContainerGap())
         );
@@ -318,8 +373,7 @@ public class Acceso extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(Encabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Contenido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(Contenido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -334,6 +388,7 @@ public class Acceso extends javax.swing.JFrame {
     }//GEN-LAST:event_IngresarContraseñaActionPerformed
 
     public static void main(String args[]) {
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -365,7 +420,7 @@ public class Acceso extends javax.swing.JFrame {
     private javax.swing.JPanel Contenido;
     private javax.swing.JPanel Encabezado;
     private javax.swing.JLabel INGRESAR;
-    private javax.swing.JTextField IngresarContraseña;
+    private javax.swing.JPasswordField IngresarContraseña;
     private javax.swing.JTextField IngresarCorreo;
     private javax.swing.JLabel InicioUniversidadDeLima;
     private javax.swing.JLabel Registrarse;
@@ -374,6 +429,7 @@ public class Acceso extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables

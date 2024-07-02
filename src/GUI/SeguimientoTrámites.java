@@ -13,11 +13,11 @@ import Trámites._6_Roles.Personal;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class VistaInteresado extends javax.swing.JFrame {
+public class SeguimientoTrámites extends javax.swing.JFrame {
 
     private Acceso acceso;
 
-    public VistaInteresado(Acceso acceso) {
+    public SeguimientoTrámites(Acceso acceso) {
         this.acceso = acceso;
         initComponents();
         
@@ -72,15 +72,13 @@ public class VistaInteresado extends javax.swing.JFrame {
 
         Encabezado = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         ObservarSeguimientoImg = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        IniciarTrámiteTxt = new javax.swing.JLabel();
-        IniciarTrámiteImg = new javax.swing.JLabel();
-        ObservarSeguimientoTxt = new javax.swing.JLabel();
         TextoVolver = new javax.swing.JLabel();
         Volver = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,39 +103,37 @@ public class VistaInteresado extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        jLabel1.setText("¿Qué desea hacer hoy?");
-
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
-        jLabel3.setText("¡Hola, " + nomUsuario() + "!");
+        jLabel3.setText("Mis trámites");
 
         ObservarSeguimientoImg.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         ObservarSeguimientoImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/Observar seguimiento.png"))); // NOI18N
         ObservarSeguimientoImg.setToolTipText("");
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/ImagenSolicitud.png"))); // NOI18N
-
-        IniciarTrámiteTxt.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
-        IniciarTrámiteTxt.setText("Iniciar un nuevo trámite");
-
-        IniciarTrámiteImg.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        IniciarTrámiteImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/Nuevo trámite.png"))); // NOI18N
-        IniciarTrámiteImg.setToolTipText("");
-
-        ObservarSeguimientoTxt.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
-        ObservarSeguimientoTxt.setText("Observar seguimiento de mis trámites");
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/MenuMisTramites.png"))); // NOI18N
 
         TextoVolver.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         TextoVolver.setForeground(new java.awt.Color(255, 102, 0));
-        TextoVolver.setText(volverCond());
+        TextoVolver.setText("Volver");
 
         Volver.setFont(new java.awt.Font("Segoe UI", 1, 5)); // NOI18N
-        Volver.setIcon(new javax.swing.ImageIcon(getClass().getResource(iconoCond())));
+        Volver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/Atrás.png"))); // NOI18N
         Volver.setToolTipText("");
         Volver.setMaximumSize(new java.awt.Dimension(526, 446));
         Volver.setMinimumSize(new java.awt.Dimension(526, 446));
         Volver.setName(""); // NOI18N
+
+        jList1.setBackground(new java.awt.Color(204, 204, 204));
+        jList1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 102, 0), 5, true));
+        jList1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jList1.setForeground(new java.awt.Color(255, 102, 0));
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -145,25 +141,18 @@ public class VistaInteresado extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(Encabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TextoVolver))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ObservarSeguimientoImg)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ObservarSeguimientoTxt))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(IniciarTrámiteImg)
-                        .addGap(62, 62, 62)
-                        .addComponent(IniciarTrámiteTxt)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addGap(52, 52, 52)
+                        .addComponent(ObservarSeguimientoImg))
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 279, Short.MAX_VALUE)
                 .addComponent(jLabel5))
         );
         layout.setVerticalGroup(
@@ -172,29 +161,23 @@ public class VistaInteresado extends javax.swing.JFrame {
                 .addComponent(Encabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(76, 76, 76)
                                 .addComponent(jLabel3))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
+                                .addGap(46, 46, 46)
+                                .addComponent(ObservarSeguimientoImg))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(TextoVolver)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel1)
-                        .addGap(48, 48, 48)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ObservarSeguimientoImg)
-                            .addComponent(ObservarSeguimientoTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(117, 117, 117)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(IniciarTrámiteTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(IniciarTrámiteImg)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)))
-                .addContainerGap(556, Short.MAX_VALUE))
+                        .addGap(33, 33, 33)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(558, Short.MAX_VALUE))
         );
 
         pack();
@@ -217,21 +200,28 @@ public class VistaInteresado extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaInteresado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SeguimientoTrámites.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaInteresado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SeguimientoTrámites.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaInteresado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SeguimientoTrámites.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaInteresado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SeguimientoTrámites.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
             Acceso acceso = new Acceso();
-                new VistaInteresado(acceso).setVisible(true);
+                new SeguimientoTrámites(acceso).setVisible(true);
             }
         });
     }
@@ -240,15 +230,13 @@ public class VistaInteresado extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Encabezado;
-    private javax.swing.JLabel IniciarTrámiteImg;
-    private javax.swing.JLabel IniciarTrámiteTxt;
     private javax.swing.JLabel ObservarSeguimientoImg;
-    private javax.swing.JLabel ObservarSeguimientoTxt;
     private javax.swing.JLabel TextoVolver;
     private javax.swing.JLabel Volver;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

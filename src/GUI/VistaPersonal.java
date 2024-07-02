@@ -4,6 +4,8 @@
  */
 package GUI;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author N04640
@@ -15,6 +17,9 @@ public class VistaPersonal extends javax.swing.JFrame {
      */
     public VistaPersonal() {
         initComponents();
+        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -26,21 +31,145 @@ public class VistaPersonal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Encabezado = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        IniciarTrámitePersonal = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        RegistrarFinalización = new javax.swing.JRadioButton();
+        RegistrarMovimiento = new javax.swing.JRadioButton();
+        RegistrarIngreso = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Encabezado.setBackground(new java.awt.Color(204, 204, 204));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/logo_ulima.png"))); // NOI18N
+
+        javax.swing.GroupLayout EncabezadoLayout = new javax.swing.GroupLayout(Encabezado);
+        Encabezado.setLayout(EncabezadoLayout);
+        EncabezadoLayout.setHorizontalGroup(
+            EncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EncabezadoLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel2)
+                .addContainerGap(1491, Short.MAX_VALUE))
+        );
+        EncabezadoLayout.setVerticalGroup(
+            EncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EncabezadoLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        IniciarTrámitePersonal.setBackground(new java.awt.Color(255, 153, 0));
+        IniciarTrámitePersonal.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        IniciarTrámitePersonal.setText("Iniciar trámite personal");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        RegistrarFinalización.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        RegistrarFinalización.setText("Finalización");
+        RegistrarFinalización.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegistrarFinalizaciónActionPerformed(evt);
+            }
+        });
+
+        RegistrarMovimiento.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        RegistrarMovimiento.setText("Movimiento");
+        RegistrarMovimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegistrarMovimientoActionPerformed(evt);
+            }
+        });
+
+        RegistrarIngreso.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        RegistrarIngreso.setText("Ingreso");
+        RegistrarIngreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegistrarIngresoActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        jLabel1.setText("Registrar");
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/MenuPersonal.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(Encabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(IniciarTrámitePersonal)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(RegistrarFinalización)
+                            .addComponent(jLabel1)
+                            .addComponent(RegistrarIngreso)
+                            .addComponent(RegistrarMovimiento))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Encabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(RegistrarIngreso)
+                                .addGap(39, 39, 39)
+                                .addComponent(RegistrarMovimiento)
+                                .addGap(42, 42, 42)
+                                .addComponent(RegistrarFinalización))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(32, 32, 32)
+                        .addComponent(IniciarTrámitePersonal))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void RegistrarFinalizaciónActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarFinalizaciónActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RegistrarFinalizaciónActionPerformed
+
+    private void RegistrarMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarMovimientoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RegistrarMovimientoActionPerformed
+
+    private void RegistrarIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarIngresoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RegistrarIngresoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +207,15 @@ public class VistaPersonal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Encabezado;
+    private javax.swing.JButton IniciarTrámitePersonal;
+    private javax.swing.JRadioButton RegistrarFinalización;
+    private javax.swing.JRadioButton RegistrarIngreso;
+    private javax.swing.JRadioButton RegistrarMovimiento;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
