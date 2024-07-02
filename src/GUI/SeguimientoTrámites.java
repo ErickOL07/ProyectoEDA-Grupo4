@@ -10,6 +10,10 @@ import Trámites._6_Roles.Admin;
 import Trámites._6_Roles.Institución;
 import Trámites._6_Roles.Persona;
 import Trámites._6_Roles.Personal;
+import java.awt.Desktop;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URI;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -20,7 +24,7 @@ public class SeguimientoTrámites extends javax.swing.JFrame {
     public SeguimientoTrámites(Acceso acceso) {
         this.acceso = acceso;
         initComponents();
-        
+        agregarEventos();
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -40,25 +44,24 @@ public class SeguimientoTrámites extends javax.swing.JFrame {
         return "Usuario desconocido";
     }
     
-    private String iconoCond() {
+    private void agregarEventos() {
         
-        if (acceso.usuarioActual() instanceof Admin || acceso.usuarioActual() instanceof Personal) {
-            return "/Vectores/Atrás.png";
-        } else {
-            return "/Vectores/Nada.png";
-        }
-    }
+        TextoVolver.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                VistaInteresado VistaInteresadoFrame = new VistaInteresado(acceso);
+                VistaInteresadoFrame.setVisible(true);
+                dispose();
+            }
+        });
         
-    private String volverCond() {
-        
-        if (acceso.usuarioActual() instanceof Admin) {
-            return "Vista de administrador";
-        } else if (acceso.usuarioActual() instanceof Personal) {
-            return "Vista de personal";
-        } else {
-            return "";
-        }
-        
+        Volver.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                VistaInteresado VistaInteresadoFrame = new VistaInteresado(acceso);
+                VistaInteresadoFrame.setVisible(true);
+                dispose();
+            }
+        });        
+
     }
 
     /**

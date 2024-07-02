@@ -1,6 +1,7 @@
 package GUI;
 
 import TDA.*;
+import Trámites.*;
 import Trámites._1_Inicio.*;
 import Trámites._5_Interesados.*;
 import Trámites._6_Roles.*;
@@ -19,73 +20,12 @@ public class Acceso extends javax.swing.JFrame {
     public Acceso() {
         initComponents();
         agregarEventos();
-        inicializarListas();
-    }
-    
-    private void inicializarListas() {
-        listaDependencias = new ListaEnlazada<>();
-        listaUsuarios = new ListaEnlazada<>();
-        
-        // Dependencias:
-        
-        // Facultades y Programas de Pregrado
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Estudios Generales", "FPP_EG-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Arquitectura", "FPP_FA_Arq-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Contabilidad", "FPP_FCEE_Con-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Economía", "FPP_FCEE_Eco-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Negocios Internacionales", "FPP_FCEE_Neg-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Administración", "FPP_FCEE_Adm-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Marketing", "FPP_FCEE_Mar-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Comunicación", "FPP_FC_Com-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Derecho", "FPP_FD_Der-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Ingeniería Civil", "FPP_FI_Civ-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Ingeniería Industrial", "FPP_FI_Ind-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Ingeniería de Sistemas", "FPP_FI_Sis-"));
-        listaDependencias.insertar(new Dependencia("Facultades y Programas de Pregrado", "Psicología", "FPP_FP_Psi-"));
-        // Estudios de Posgrado
-        listaDependencias.insertar(new Dependencia("Estudios de Posgrado", "POS-"));
-        // Programas de Educación Ejecutiva
-        listaDependencias.insertar(new Dependencia("Programas de Educación Ejecutiva", "PEG-"));
-        // Oficinas Administrativas y Servicios
-        listaDependencias.insertar(new Dependencia("Oficinas Administrativas y Servicios", "Biblioteca", "OAS_Bib-"));
-        listaDependencias.insertar(new Dependencia("Oficinas Administrativas y Servicios", "Bienestar", "OAS_Bie-"));
-        listaDependencias.insertar(new Dependencia("Oficinas Administrativas y Servicios", "Deportes", "OAS_Dep-"));
-        listaDependencias.insertar(new Dependencia("Oficinas Administrativas y Servicios", "Cultura", "OAS_Cul-"));
-        listaDependencias.insertar(new Dependencia("Oficinas Administrativas y Servicios", "Fondo Editorial", "OAS_Fon-"));
-        listaDependencias.insertar(new Dependencia("Oficinas Administrativas y Servicios", "Relaciones Internacionales", "OAS_Rel-"));
-        listaDependencias.insertar(new Dependencia("Oficinas Administrativas y Servicios", "Red de Graduados", "OAS_Red-"));
-        // Centros e Institutos
-        listaDependencias.insertar(new Dependencia("Centros e Institutos", "Centro Cultural", "CI_CCul-"));
-        listaDependencias.insertar(new Dependencia("Centros e Institutos", "Centro de Empleabilidad", "CI_CEmpl-"));
-        listaDependencias.insertar(new Dependencia("Centros e Institutos", "Centro de Emprendimiento", "CI_CEmpr-"));
-        listaDependencias.insertar(new Dependencia("Centros e Institutos", "Observatorio", "CI_Obs-"));
-        listaDependencias.insertar(new Dependencia("Centros e Institutos", "Instituto de Investigación", "CI_IInv-"));
-        
-        
-        // Usuarios:
-        
-        // Administradores
-            listaUsuarios.insertar(new Admin("Hector Gianmarco", "Arrasco Juarez", "76145825", "20223148@aloe.ulima.edu.pe", "76145825"));
-            listaUsuarios.insertar(new Admin("Erick", "Obradovich Luna", "70814703", "20221751@aloe.ulima.edu.pe", "70814703"));
-            listaUsuarios.insertar(new Admin("Roberto Victor", "Rodenas Rodenas", "71261584", "20222182@aloe.ulima.edu.pe", "71261584"));
-            listaUsuarios.insertar(new Admin("Claudia Patricia", "Sipion Guillen", "70901486", "20224062@aloe.ulima.edu.pe", "70901486"));
-        // Personal de dependencia
-            // Facultades y Programas de Pregrado, Ingeniería de Sistemas
-            listaUsuarios.insertar(new Personal("Jim Bryan", "Dios Luna", "10101010", "FPP_FI_Sis-", "jdios@aloe.ulima.edu.pe", "sistemas"));
-            // Estudios de Posgrado
-            listaUsuarios.insertar(new Personal("Gepeto", "Fossati", "00000001", "POS-", "gfossati@aloe.ulima.edu.pe", "posgrado"));
-            // Oficinas Administrativas y Servicios, Deportes
-            listaUsuarios.insertar(new Personal("Christian Alberto", "Cueva Bravo", "12345678", "OAS_Dep-", "ccueva@aloe.ulima.edu.pe", "deportes"));
-        // Interesados comunes
-            // Persona
-            listaUsuarios.insertar(new Persona("Makanaky", "La Realeza", "66666666", "makanaky@gmail.com", "makanaky"));
-            // Institución
-            listaUsuarios.insertar(new Institución("USB", "USB@ucv.edu.pe", "paolo"));
-        
+        listaDependencias = Datos.listaDependencias;
+        listaUsuarios = Datos.listaUsuarios;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-
+    
     public ListaEnlazada<Dependencia> getListaDependencias() {
         return listaDependencias;
     }
@@ -298,52 +238,48 @@ public class Acceso extends javax.swing.JFrame {
         Contenido.setLayout(ContenidoLayout);
         ContenidoLayout.setHorizontalGroup(
             ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
+            .addGroup(ContenidoLayout.createSequentialGroup()
                 .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ContenidoLayout.createSequentialGroup()
-                        .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(ContenidoLayout.createSequentialGroup()
-                                .addGap(108, 108, 108)
-                                .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(INGRESAR)
-                                    .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(ContenidoLayout.createSequentialGroup()
-                                            .addComponent(jLabel5)
-                                            .addGap(173, 173, 173)
-                                            .addComponent(IngresarCorreo))
-                                        .addGroup(ContenidoLayout.createSequentialGroup()
-                                            .addComponent(jLabel4)
-                                            .addGap(108, 108, 108)
-                                            .addComponent(IngresarContraseña)))
-                                    .addComponent(Registrarse)))
-                            .addGroup(ContenidoLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel7)))
+                        .addGap(108, 108, 108)
+                        .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(INGRESAR)
+                            .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(ContenidoLayout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addGap(173, 173, 173)
+                                    .addComponent(IngresarCorreo))
+                                .addGroup(ContenidoLayout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addGap(108, 108, 108)
+                                    .addComponent(IngresarContraseña)))
+                            .addComponent(Registrarse))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel3))
+                    .addGroup(ContenidoLayout.createSequentialGroup()
+                        .addGap(0, 327, Short.MAX_VALUE)
                         .addComponent(jLabel6)
-                        .addGap(237, 237, 237)))
+                        .addGap(237, 237, 237))
+                    .addGroup(ContenidoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2))
         );
         ContenidoLayout.setVerticalGroup(
             ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 788, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(ContenidoLayout.createSequentialGroup()
                 .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContenidoLayout.createSequentialGroup()
                         .addGap(105, 105, 105)
                         .addComponent(jLabel6)
                         .addGap(101, 101, 101)
-                        .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
+                        .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(ContenidoLayout.createSequentialGroup()
                                 .addGap(7, 7, 7)
-                                .addComponent(IngresarCorreo)))
+                                .addComponent(IngresarCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
+                            .addComponent(jLabel5))
                         .addGap(101, 101, 101))
                     .addGroup(ContenidoLayout.createSequentialGroup()
                         .addGap(392, 392, 392)
@@ -356,9 +292,9 @@ public class Acceso extends javax.swing.JFrame {
                 .addComponent(INGRESAR)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Registrarse)
-                .addGap(204, 204, 204)
-                .addComponent(jLabel7)
-                .addContainerGap())
+                .addGap(180, 180, 180)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -373,7 +309,7 @@ public class Acceso extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(Encabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Contenido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(Contenido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

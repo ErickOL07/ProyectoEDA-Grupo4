@@ -1,26 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package GUI;
 
-import TDA.Nodo;
-import Trámites._5_Interesados.Usuario;
-import Trámites._6_Roles.Admin;
-import Trámites._6_Roles.Institución;
-import Trámites._6_Roles.Persona;
-import Trámites._6_Roles.Personal;
+import TDA.*;
+import Trámites.*;
+import Trámites._1_Inicio.*;
+import Trámites._2_Registro.*;
+import Trámites._5_Interesados.*;
+import Trámites._6_Roles.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.HashSet;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class NuevoTrámite extends javax.swing.JFrame {
 
     private Acceso acceso;
+    private String archivo;
 
     public NuevoTrámite(Acceso acceso) {
         this.acceso = acceso;
         initComponents();
-        
+        agregarEventos();
+        obtenerTipos();
+        obtenerSubtipos();
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -40,32 +44,154 @@ public class NuevoTrámite extends javax.swing.JFrame {
         return "Usuario desconocido";
     }
     
-    private String iconoCond() {
+    private void agregarEventos() {
         
-        if (acceso.usuarioActual() instanceof Admin || acceso.usuarioActual() instanceof Personal) {
-            return "/Vectores/Atrás.png";
-        } else {
-            return "/Vectores/Nada.png";
+        TextoVolver.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                VistaInteresado VistaInteresadoFrame = new VistaInteresado(acceso);
+                VistaInteresadoFrame.setVisible(true);
+                dispose();
+            }
+        });
+        
+        Volver.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                VistaInteresado VistaInteresadoFrame = new VistaInteresado(acceso);
+                VistaInteresadoFrame.setVisible(true);
+                dispose();
+            }
+        });        
+
+        SelSubtipoDependencia.setEnabled(false);
+    }
+    
+    private void nuevoTrámite() {
+        try {
+            String asunto = IngresarAsunto.getText().trim();
+            String documentoReferencia = archivo;
+            Usuario usuarioActual = acceso.usuarioActual();
+
+            if (asunto.isEmpty() || documentoReferencia.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            Dependencia dependencia = obtenerDependencia();
+            
+            Expediente nuevoExpediente = new Expediente(dependencia, false, usuarioActual, asunto, documentoReferencia);
+
+            Datos.expedientesNuevos.insertar(nuevoExpediente);
+
+            JOptionPane.showMessageDialog(this, "Trámite creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al crear el trámite: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    private void obtenerTipos() {
+
+        Nodo<Dependencia> ptr = acceso.getListaDependencias().getHead();
+        ListaEnlazada<Dependencia> L = new ListaEnlazada<>();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (!tipoRepetido(dependencia.getTipo(), L)) {
+                SelTipoDependencia.addItem(dependencia.getTipo());
+            }
+            ptr = ptr.getNext();
         
-    private String volverCond() {
-        
-        if (acceso.usuarioActual() instanceof Admin) {
-            return "Vista de administrador";
-        } else if (acceso.usuarioActual() instanceof Personal) {
-            return "Vista de personal";
-        } else {
-            return "";
         }
         
+        if (SelSubtipoDependencia.getItemCount() > 0) {
+            SelSubtipoDependencia.setEnabled(true);
+        } else {
+            SelSubtipoDependencia.setEnabled(false);
+        }
+    }
+    
+    private boolean tipoRepetido(String tipo, ListaEnlazada<Dependencia> L) {
+        
+        Nodo<Dependencia> ptr = L.getHead();
+        boolean s = false;
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo() == tipo) {
+                s = true;
+            }
+            ptr = ptr.getNext();
+            
+        }
+        
+        return s;
+    }
+    
+    private void obtenerSubtipos() {
+        String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
+        
+        SelSubtipoDependencia.removeAllItems();
+        
+        Nodo<Dependencia> ptr = acceso.getListaDependencias().getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo() == tipoSeleccionado) {
+                SelSubtipoDependencia.addItem(dependencia.getSubTipo());
+            }
+            ptr = ptr.getNext();
+        
+        }
+        
+        if (SelSubtipoDependencia.getItemCount() > 0) {
+            SelSubtipoDependencia.setEnabled(true);
+        } else {
+            SelSubtipoDependencia.setEnabled(false);
+        }
+    }
+    
+    private Dependencia obtenerDependencia() {
+        
+        String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
+        Dependencia dep = new Dependencia(null, null, null);
+        if (SelSubtipoDependencia.getItemCount() > 0) {
+            Nodo<Dependencia> ptr = acceso.getListaDependencias().getHead();
+            String subtipoSeleccionado = (String) SelSubtipoDependencia.getSelectedItem();
+            while (ptr != null) {
+                Dependencia dependencia = ptr.getData();
+                if (dependencia.getTipo() == tipoSeleccionado) {
+                    if (dependencia.getSubTipo() == subtipoSeleccionado) {
+                        dep = dependencia;
+                    }
+                }
+                ptr = ptr.getNext();
+                
+            }
+        } else {
+            Nodo<Dependencia> ptr = acceso.getListaDependencias().getHead();
+            while (ptr != null) {
+                Dependencia dependencia = ptr.getData();
+                if (dependencia.getTipo() == tipoSeleccionado) {
+                        dep = dependencia;
+                }
+                ptr = ptr.getNext();
+                
+            }
+        }
+        return dep;
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+    private void seleccionarArchivo() {
+        JFileChooser fileChooser = new JFileChooser();
+        int M = fileChooser.showOpenDialog(this);
+
+        if (M == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = fileChooser.getSelectedFile();
+            archivo = archivoSeleccionado.getName();
+            NombreArchivo.setText(archivo);            
+            JOptionPane.showMessageDialog(this, "Se seleccionó el archivo " + archivoSeleccionado.getName() + ".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -79,12 +205,13 @@ public class NuevoTrámite extends javax.swing.JFrame {
         Volver = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        IngresarApellido = new javax.swing.JTextField();
+        IngresarAsunto = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        Enviar = new javax.swing.JButton();
         SelTipoDependencia = new javax.swing.JComboBox<>();
         SelSubtipoDependencia = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
+        Seleccionar = new javax.swing.JButton();
+        NombreArchivo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,22 +263,22 @@ public class NuevoTrámite extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setText("Asunto");
 
-        IngresarApellido.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        IngresarApellido.addActionListener(new java.awt.event.ActionListener() {
+        IngresarAsunto.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        IngresarAsunto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarApellidoActionPerformed(evt);
+                IngresarAsuntoActionPerformed(evt);
             }
         });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel7.setText("Documento referencia");
 
-        jButton1.setBackground(new java.awt.Color(255, 153, 0));
-        jButton1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jButton1.setText("Enviar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Enviar.setBackground(new java.awt.Color(255, 153, 0));
+        Enviar.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        Enviar.setText("Enviar");
+        Enviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                EnviarActionPerformed(evt);
             }
         });
 
@@ -159,7 +286,14 @@ public class NuevoTrámite extends javax.swing.JFrame {
 
         SelSubtipoDependencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jButton2.setText("Seleccionar");
+        Seleccionar.setText("Seleccionar");
+        Seleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SeleccionarActionPerformed(evt);
+            }
+        });
+
+        NombreArchivo.setText(archivo);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -167,40 +301,40 @@ public class NuevoTrámite extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(Encabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextoVolver))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextoVolver))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addGap(52, 52, 52)
+                        .addComponent(IniciarTrámiteImg))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel4))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(52, 52, 52)
-                                .addComponent(IniciarTrámiteImg))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(IngresarAsunto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel4))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                                .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(IngresarApellido, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(108, 108, 108)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(39, 39, 39)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 319, Short.MAX_VALUE)
+                                .addComponent(Enviar)
+                                .addGap(17, 17, 17))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(Seleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(NombreArchivo)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(jLabel5))
         );
         layout.setVerticalGroup(
@@ -231,14 +365,15 @@ public class NuevoTrámite extends javax.swing.JFrame {
                             .addComponent(SelSubtipoDependencia))
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(IngresarAsunto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
                         .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(52, 52, 52)
-                        .addComponent(jButton1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(Seleccionar)
+                            .addComponent(NombreArchivo))
+                        .addGap(47, 47, 47)
+                        .addComponent(Enviar)
                         .addGap(347, 347, 347)))
                 .addContainerGap(560, Short.MAX_VALUE))
         );
@@ -246,13 +381,17 @@ public class NuevoTrámite extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void IngresarApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarApellidoActionPerformed
+    private void IngresarAsuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarAsuntoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_IngresarApellidoActionPerformed
+    }//GEN-LAST:event_IngresarAsuntoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void EnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarActionPerformed
+        nuevoTrámite();
+    }//GEN-LAST:event_EnviarActionPerformed
+
+    private void SeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeleccionarActionPerformed
+        seleccionarArchivo();
+    }//GEN-LAST:event_SeleccionarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -297,14 +436,15 @@ public class NuevoTrámite extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Encabezado;
-    private javax.swing.JTextField IngresarApellido;
+    private javax.swing.JButton Enviar;
+    private javax.swing.JTextField IngresarAsunto;
     private javax.swing.JLabel IniciarTrámiteImg;
+    private javax.swing.JLabel NombreArchivo;
     private javax.swing.JComboBox<String> SelSubtipoDependencia;
     private javax.swing.JComboBox<String> SelTipoDependencia;
+    private javax.swing.JButton Seleccionar;
     private javax.swing.JLabel TextoVolver;
     private javax.swing.JLabel Volver;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
