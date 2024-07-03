@@ -42,7 +42,7 @@ public class VistaInteresado extends javax.swing.JFrame {
         if (acceso.usuarioActual() instanceof Admin || acceso.usuarioActual() instanceof Personal) {
             return "/Vectores/Atrás.png";
         } else {
-            return "/Vectores/Nada.png";
+            return "/Vectores/CerrarSesión.png";
         }
     }
         
@@ -53,7 +53,7 @@ public class VistaInteresado extends javax.swing.JFrame {
         } else if (acceso.usuarioActual() instanceof Personal) {
             return "Vista de personal";
         } else {
-            return "";
+            return "  Cerrar sesión";
         }
         
     }
@@ -88,6 +88,42 @@ public class VistaInteresado extends javax.swing.JFrame {
                 NuevoTrámite NuevoTrámiteFrame = new NuevoTrámite(acceso);
                 NuevoTrámiteFrame.setVisible(true);
                 dispose();
+            }
+        });
+        
+        Volver.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (acceso.usuarioActual() instanceof Admin) {
+                    VistaAdmin VistaAdminFrame = new VistaAdmin(acceso);
+                    VistaAdminFrame.setVisible(true);
+                    dispose();
+                } else if (acceso.usuarioActual() instanceof Personal) {
+                    VistaPersonal VistaPersonalFrame = new VistaPersonal();
+                    VistaPersonalFrame.setVisible(true);
+                    dispose();
+                } else {
+                    Acceso AccesoFrame = new Acceso();
+                    AccesoFrame.setVisible(true);
+                    dispose();
+                }
+            }
+        });
+        
+        TextoVolver.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (acceso.usuarioActual() instanceof Admin) {
+                    VistaAdmin VistaAdminFrame = new VistaAdmin(acceso);
+                    VistaAdminFrame.setVisible(true);
+                    dispose();
+                } else if (acceso.usuarioActual() instanceof Personal) {
+                    VistaPersonal VistaPersonalFrame = new VistaPersonal();
+                    VistaPersonalFrame.setVisible(true);
+                    dispose();
+                } else {
+                    Acceso AccesoFrame = new Acceso();
+                    AccesoFrame.setVisible(true);
+                    dispose();
+                }
             }
         });
 

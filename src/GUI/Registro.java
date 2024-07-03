@@ -23,7 +23,7 @@ public class Registro extends javax.swing.JFrame {
 
     public Registro() {
         initComponents();
-        agregarEventos();
+            agregarEventos();
         
         listaDependencias = Datos.listaDependencias;
         listaUsuarios = Datos.listaUsuarios;

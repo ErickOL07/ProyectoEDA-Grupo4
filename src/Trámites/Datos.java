@@ -3,20 +3,25 @@ package Trámites;
 import TDA.*;
 import Trámites._1_Inicio.*;
 import Trámites._2_Registro.*;
+import Trámites._3_FlujoRegistro.*;
+import Trámites._4_Seguimiento.*;
 import Trámites._5_Interesados.*;
 import Trámites._6_Roles.*;
+import javax.swing.JOptionPane;
 
 public class Datos {
     
     public static ListaEnlazada<Dependencia> listaDependencias = new ListaEnlazada<>();
     public static ListaEnlazada<Usuario> listaUsuarios = new ListaEnlazada<>();
     public static ListaEnlazada<Expediente> expedientesNuevos = new ListaEnlazada<>();
+    public static SistemaTramite sistema = new SistemaTramite();
     
     static {
         inicializarListas();
     }
 
     private static void inicializarListas() {
+        
         // Dependencias:
         
         // Facultades y Programas de Pregrado
@@ -72,7 +77,125 @@ public class Datos {
             listaUsuarios.insertar(new Persona("Makanaky", "La Realeza", "66666666", "makanaky@gmail.com", "makanaky"));
             // Institución
             listaUsuarios.insertar(new Institución("USB", "USB@ucv.edu.pe", "paolo"));
+            
+            
+        // Expedientes:
+        
+        Expediente expediente1 = new Expediente(buscarDependencia("FPP_FI_Sis-"), 
+                                    false, 
+                                    buscarUsuario("makanaky@gmail.com"),
+                                    "Solicitud de clase piloto",
+                                    "SolicitudClasePiloto.pdf");
+        sistema.registrarExpediente(buscarDependencia("FPP_FI_Sis-"), expediente1);
+        sistema.finalizarExpediente("FPP_FI_Sis-0000000001");
+        
+        Expediente expediente2 = new Expediente(buscarDependencia("PEG-"), 
+                                    false, 
+                                    buscarUsuario("makanaky@gmail.com"),
+                                    "Reclamo",
+                                    "Informe.pdf");
+        sistema.registrarExpediente(buscarDependencia("PEG-"), expediente2);
+        sistema.moverExpediente("PEG-0000000002", buscarDependencia("OAS_Cul-"));
+        sistema.agregarDocumento("PEG-0000000002", "Respuesta.pdf");
+        
+        Expediente expediente3 = new Expediente(buscarDependencia("OAS_Bie-"), 
+                                    false, 
+                                    buscarUsuario("gfossati@aloe.ulima.edu.pe"),
+                                    "Solicitud de apoyo económico",
+                                    "SolicitudApoyoEconomico.pdf");
+        sistema.registrarExpediente(buscarDependencia("OAS_Bie-"), expediente3);
+        sistema.agregarDocumento("OAS_Bie-0000000003", "EvaluacionApoyo.pdf");
 
+        Expediente expediente4 = new Expediente(buscarDependencia("CI_CCul-"), 
+                                    false, 
+                                    buscarUsuario("USB@ucv.edu.pe"),
+                                    "Solicitud de uso de instalaciones",
+                                    "SolicitudUsoInstalaciones.pdf");
+        sistema.registrarExpediente(buscarDependencia("CI_CCul-"), expediente4);
+        sistema.moverExpediente("CI_CCul-0000000004", buscarDependencia("OAS_Cul-"));
+        
+        Expediente expediente5 = new Expediente(buscarDependencia("FPP_FCEE_Adm-"), 
+                                    false, 
+                                    buscarUsuario("jdios@aloe.ulima.edu.pe"),
+                                    "Revisión de plan de estudios",
+                                    "RevisionPlanEstudios.pdf");
+        sistema.registrarExpediente(buscarDependencia("FPP_FCEE_Adm-"), expediente5);
+        sistema.moverExpediente("FPP_FCEE_Adm-0000000005", buscarDependencia("FPP_FCEE_Con-"));
+        sistema.agregarDocumento("FPP_FCEE_Adm-0000000005", "InformeFinal.pdf");
+
+        Expediente expediente6 = new Expediente(buscarDependencia("OAS_Fon-"), 
+                                    false, 
+                                    buscarUsuario("ccueva@aloe.ulima.edu.pe"),
+                                    "Solicitud de publicación",
+                                    "SolicitudPublicacion.pdf");
+        sistema.registrarExpediente(buscarDependencia("OAS_Fon-"), expediente6);
+        sistema.finalizarExpediente("OAS_Fon-0000000006");
+
+        Expediente expediente7 = new Expediente(buscarDependencia("FPP_FCEE_Eco-"), 
+                                    false, 
+                                    buscarUsuario("makanaky@gmail.com"),
+                                    "Solicitud de beca",
+                                    "SolicitudBeca.pdf");
+        sistema.registrarExpediente(buscarDependencia("FPP_FCEE_Eco-"), expediente7);
+        sistema.agregarDocumento("FPP_FCEE_Eco-0000000007", "EvaluacionBeca.pdf");
+
+        Expediente expediente8 = new Expediente(buscarDependencia("OAS_Dep-"), 
+                                    false, 
+                                    buscarUsuario("gfossati@aloe.ulima.edu.pe"),
+                                    "Informe de actividades deportivas",
+                                    "InformeActividadesDeportivas.pdf");
+        sistema.registrarExpediente(buscarDependencia("OAS_Dep-"), expediente8);
+        sistema.moverExpediente("OAS_Dep-0000000008", buscarDependencia("OAS_Bie-"));
+
+        Expediente expediente9 = new Expediente(buscarDependencia("CI_Obs-"), 
+                                    false, 
+                                    buscarUsuario("USB@ucv.edu.pe"),
+                                    "Informe de investigación",
+                                    "InformeInvestigacion.pdf");
+        sistema.registrarExpediente(buscarDependencia("CI_Obs-"), expediente9);
+        sistema.agregarDocumento("CI_Obs-0000000009", "EvaluacionInvestigacion.pdf");
+
+        Expediente expediente10 = new Expediente(buscarDependencia("POS-"), 
+                                    false, 
+                                    buscarUsuario("ccueva@aloe.ulima.edu.pe"),
+                                    "Inscripción a curso de posgrado",
+                                    "InscripcionCursoPosgrado.pdf");
+        sistema.registrarExpediente(buscarDependencia("POS-"), expediente10);
+        sistema.finalizarExpediente("POS-0000000010");
+
+        Expediente expediente11 = new Expediente(buscarDependencia("FPP_FP_Psi-"), 
+                                    false, 
+                                    buscarUsuario("makanaky@gmail.com"),
+                                    "Solicitud de asesoramiento psicológico",
+                                    "SolicitudAsesoramientoPsicologico.pdf");
+        sistema.registrarExpediente(buscarDependencia("FPP_FP_Psi-"), expediente11);
+        sistema.agregarDocumento("FPP_FP_Psi-0000000011", "EvaluacionPsicologica.pdf");
+        
     }
     
+    public static Dependencia buscarDependencia(String baseID) {
+        Nodo<Dependencia> ptr = listaDependencias.getHead();
+        while (ptr != null) {
+            if (ptr.getData().getID().equals(baseID)) {
+                return ptr.getData();
+            }
+            ptr = ptr.getNext();
+        }
+        JOptionPane.showMessageDialog(null, "No se encontró la dependencia con ID base: " + baseID, "Error", JOptionPane.ERROR_MESSAGE);
+        return null;
+    }
+
+    public static Usuario buscarUsuario(String correo) {
+        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        while (ptr != null) {
+            if (ptr.getData().getCorreo().equals(correo)) {
+                return ptr.getData();
+            }
+            ptr = ptr.getNext();
+        }
+        JOptionPane.showMessageDialog(null, "No se encontró el usuario con correo electrónico: " + correo, "Error", JOptionPane.ERROR_MESSAGE);
+        return null;
+    }
 }
+    
+

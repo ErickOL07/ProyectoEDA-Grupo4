@@ -17,6 +17,7 @@ public class SistemaTramite {
     public SistemaTramite() {
         this.listaTrámites = new ListaEnlazada<Trámite>();
         this.listaDependencias = new ListaEnlazada<Dependencia>();
+        this.listaExpedientes = new ListaEnlazada<Expediente>();
         this.expedientes = new ColaExpediente(); 
     }
 
@@ -27,42 +28,56 @@ public class SistemaTramite {
             return dependencia.getTipo() + ", " + dependencia.getSubTipo();
         }
     }
+    
+    private String generarID(Dependencia dependencia) {
+        String prefix = dependencia.getID();
+        int counter = listaExpedientes.contar() + 1;
+        return String.format("%s%010d", prefix, counter);
+    }
 
-    public void registrarExpediente(Dependencia dependencia, Expediente expediente, Trámite trámite) {
-        trámite.setFechaHoraInicio(new Date().toString());
+    public void registrarExpediente(Dependencia dependencia, Expediente expediente) {
+        if (expediente.getId() == null) {
+            expediente.setId(generarID(dependencia));
+        }
+        expediente.getTrámite().setFechaHoraInicio(new Date().toString());
         expediente.agregarMovimiento("Expediente registrado en " + nombreDependencia(dependencia));
-        trámite.adjuntarDocumento(expediente.getDocumentoReferencia());
-        listaTrámites.insertar(trámite);
+        expediente.getTrámite().adjuntarDocumento(expediente.getDocumentoReferencia());
+        System.out.println("Registrar Expediente (antes)\n" + expedientes.toString());
+        listaTrámites.insertar(expediente.getTrámite());
         listaExpedientes.insertar(expediente);
-        expediente.setTrámite(trámite);
         agregarExpediente(expediente);
-        
+        System.out.println("Registrar Expediente (antes)\n" + expedientes.toString());
     }
     
      public void agregarExpediente(Expediente expediente) {
         expedientes.encolar(expediente);
     }
 
-    public Expediente procesarExpediente() {
-        return expedientes.desencolar();
-    }
-
     public void moverExpediente(String expedienteId, Dependencia dependenciaDestino) {
         Expediente expediente = expedientes.buscarExpediente(expedienteId);
+        System.out.println("Mover Expediente (antes)\n" + expedientes.toString());
         if (expediente != null) {
-            expediente.agregarMovimiento("Se transfirió el trámite de \"" + nombreDependencia(expediente.getDependencia()) + "\" a \"" + nombreDependencia(dependenciaDestino));
-            expediente.setDependencia(dependenciaDestino);
+            if (!expediente.isFinalizado()) {
+                expediente.agregarMovimiento("Se transfirió el trámite de \"" + nombreDependencia(expediente.getDependencia()) + "\" a \"" + nombreDependencia(dependenciaDestino) + "\"");
+                expediente.setDependencia(dependenciaDestino);
+            } else {
+                JOptionPane.showMessageDialog(null, "El expediente \"" + expedienteId + "\" ha sido finalizado y no puede ser movido.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            System.out.println("Mover Expediente (después)\n" + expedientes.toString());
         } else {
             JOptionPane.showMessageDialog(null, "Error: El expediente \"" + expedienteId + "\" no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     
     public void agregarDocumento(String expedienteId, String documento) {
         
         Expediente expediente = expedientes.buscarExpediente(expedienteId);
+        System.out.println("Añadir documento (antes)\n" + expedientes.toString());
         if (expediente != null) { 
             Trámite trámite = expediente.getTrámite();
             trámite.adjuntarDocumento(documento);
+            System.out.println("Añadir documento (después)\n" + expedientes.toString());
             expediente.agregarMovimiento(expediente.getDependencia().toString() + ": Se adjuntó \"" + documento + "\"");
         } else {
             JOptionPane.showMessageDialog(null, "Error: El expediente \"" + expedienteId + "\" no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -71,26 +86,33 @@ public class SistemaTramite {
     }
 
     public void finalizarExpediente(String expedienteId) {
+        System.out.println("Finalizar Expediente (antes)\n" + expedientes.toString());
         Expediente expediente = expedientes.buscarExpediente(expedienteId);
-        if (expediente != null) { 
-            Trámite trámite = expediente.getTrámite();
-            trámite.setFechaHoraFinalizacion(new Date().toString());
-            expediente.agregarMovimiento("Expediente finalizado");
+        if (expediente != null) {
+            if (!expediente.isFinalizado()) {
+                expediente.getTrámite().setFechaHoraFinalizacion(new Date().toString());
+                expediente.agregarMovimiento("Expediente finalizado");
+                expediente.setFinalizado(true);
+                expedientes.procesarExpediente(expedienteId);
+            } else {
+                JOptionPane.showMessageDialog(null, "El expediente \"" + expedienteId + "\" ya ha sido finalizado.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            System.out.println("Finalizar Expediente (después)\n" + expedientes.toString());
         } else {
             JOptionPane.showMessageDialog(null, "Error: El expediente \"" + expedienteId + "\" no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        this.expedientes.desencolar();
     }
 
-    public void mostrarSeguimiento(String expedienteId) {
+
+    public String mostrarSeguimiento(String expedienteId) {
         Expediente expediente = expedientes.buscarExpediente(expedienteId);
-        if (expediente != null) { 
-            System.out.println("Seguimiento del expediente " + expedienteId +
-                               ":\n" + expediente.mostrarMovimientos());
+        if (expediente != null) {
+            return "Seguimiento del expediente " + expedienteId + ":\n" + expediente.mostrarMovimientos();
         } else {
-            JOptionPane.showMessageDialog(null, "Error: El expediente \"" + expedienteId + "\" no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return "El expediente de trámite \"" + expedienteId + "\" ha finalizado.";
         }
     }
+
  
     public ListaEnlazada<Trámite> getListaTrámites() {
         return listaTrámites;

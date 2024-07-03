@@ -9,7 +9,6 @@ import Trámites._6_Roles.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.HashSet;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -63,6 +62,12 @@ public class NuevoTrámite extends javax.swing.JFrame {
         });        
 
         SelSubtipoDependencia.setEnabled(false);
+        
+        SelTipoDependencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                obtenerSubtipos();
+            }
+        });
     }
     
     private void nuevoTrámite() {
@@ -82,7 +87,7 @@ public class NuevoTrámite extends javax.swing.JFrame {
 
             Datos.expedientesNuevos.insertar(nuevoExpediente);
 
-            JOptionPane.showMessageDialog(this, "Trámite creado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Trámite creado con éxito. Se encuentra en revisión.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al crear el trámite: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -97,16 +102,12 @@ public class NuevoTrámite extends javax.swing.JFrame {
             Dependencia dependencia = ptr.getData();
             if (!tipoRepetido(dependencia.getTipo(), L)) {
                 SelTipoDependencia.addItem(dependencia.getTipo());
+                L.insertar(dependencia); 
             }
             ptr = ptr.getNext();
         
         }
         
-        if (SelSubtipoDependencia.getItemCount() > 0) {
-            SelSubtipoDependencia.setEnabled(true);
-        } else {
-            SelSubtipoDependencia.setEnabled(false);
-        }
     }
     
     private boolean tipoRepetido(String tipo, ListaEnlazada<Dependencia> L) {
@@ -115,7 +116,7 @@ public class NuevoTrámite extends javax.swing.JFrame {
         boolean s = false;
         while (ptr != null) {
             Dependencia dependencia = ptr.getData();
-            if (dependencia.getTipo() == tipo) {
+            if (dependencia.getTipo().equals(tipo)) {
                 s = true;
             }
             ptr = ptr.getNext();
@@ -133,7 +134,7 @@ public class NuevoTrámite extends javax.swing.JFrame {
         Nodo<Dependencia> ptr = acceso.getListaDependencias().getHead();
         while (ptr != null) {
             Dependencia dependencia = ptr.getData();
-            if (dependencia.getTipo() == tipoSeleccionado) {
+            if (dependencia.getTipo().equals(tipoSeleccionado) && dependencia.getSubTipo() != null) {
                 SelSubtipoDependencia.addItem(dependencia.getSubTipo());
             }
             ptr = ptr.getNext();
@@ -145,6 +146,7 @@ public class NuevoTrámite extends javax.swing.JFrame {
         } else {
             SelSubtipoDependencia.setEnabled(false);
         }
+        
     }
     
     private Dependencia obtenerDependencia() {
@@ -156,8 +158,8 @@ public class NuevoTrámite extends javax.swing.JFrame {
             String subtipoSeleccionado = (String) SelSubtipoDependencia.getSelectedItem();
             while (ptr != null) {
                 Dependencia dependencia = ptr.getData();
-                if (dependencia.getTipo() == tipoSeleccionado) {
-                    if (dependencia.getSubTipo() == subtipoSeleccionado) {
+                if (dependencia.getTipo().equals(tipoSeleccionado)) {
+                    if (dependencia.getSubTipo().equals(subtipoSeleccionado)) {
                         dep = dependencia;
                     }
                 }
@@ -168,7 +170,7 @@ public class NuevoTrámite extends javax.swing.JFrame {
             Nodo<Dependencia> ptr = acceso.getListaDependencias().getHead();
             while (ptr != null) {
                 Dependencia dependencia = ptr.getData();
-                if (dependencia.getTipo() == tipoSeleccionado) {
+                if (dependencia.getTipo().equals(tipoSeleccionado)) {
                         dep = dependencia;
                 }
                 ptr = ptr.getNext();
@@ -282,10 +284,6 @@ public class NuevoTrámite extends javax.swing.JFrame {
             }
         });
 
-        SelTipoDependencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        SelSubtipoDependencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         Seleccionar.setText("Seleccionar");
         Seleccionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -320,13 +318,13 @@ public class NuevoTrámite extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createSequentialGroup()
                                         .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(IngresarAsunto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 319, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(Enviar)
                                 .addGap(17, 17, 17))
                             .addGroup(layout.createSequentialGroup()

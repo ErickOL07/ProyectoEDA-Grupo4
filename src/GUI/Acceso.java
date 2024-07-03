@@ -106,7 +106,7 @@ public class Acceso extends javax.swing.JFrame {
             if (usuario.getNombreUsuario().equals(correo) && usuario.getContraseña().equals(contraseña)) {
                 if (usuario instanceof Admin) {
                     JOptionPane.showMessageDialog(null, "Hola, " + ((Admin) usuario).getNombre());
-                    new VistaAdmin().setVisible(true);
+                    new VistaAdmin(this).setVisible(true);
                 } else if (usuario instanceof Personal) {
                     JOptionPane.showMessageDialog(null, "Hola, " + ((Personal) usuario).getNombre());
                     new VistaPersonal().setVisible(true);
@@ -124,9 +124,7 @@ public class Acceso extends javax.swing.JFrame {
         }
     JOptionPane.showMessageDialog(null, "El usuario y/o contraseña ingresados no son correctos.");
     }
-
     
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

@@ -1,5 +1,7 @@
 package Trámites._2_Registro;
 
+import Trámites._2_Registro.*;
+
 public class ColaExpediente {
 
     private class NodoCola {
@@ -15,12 +17,10 @@ public class ColaExpediente {
 
     private NodoCola front;
     private NodoCola rear;
-    private int id;
 
     public ColaExpediente() {
         this.front = null;
         this.rear = null;
-        this.id = 1;
     }
 
     public boolean estaVacia() {
@@ -57,7 +57,6 @@ public class ColaExpediente {
                 rear = nuevo;
             }
         }
-        expediente.ID(id++);
     }
 
     public Expediente desencolar() {
@@ -73,14 +72,56 @@ public class ColaExpediente {
     }
 
     public Expediente buscarExpediente(String expedienteId) {
+        ColaExpediente colaAux = new ColaExpediente();
+        Expediente expedienteEncontrado = null;
+        
+        while (!estaVacia()) {
+            Expediente expedienteActual = desencolar();
+            if (expedienteActual.getId().equals(expedienteId)) {
+                expedienteEncontrado = expedienteActual;
+            }
+            colaAux.encolar(expedienteActual);
+        }
+        
+        while (!colaAux.estaVacia()) {
+            encolar(colaAux.desencolar());
+        }
+        
+        return expedienteEncontrado;
+    }
+    
+    public void procesarExpediente(String expedienteId) {
+        ColaExpediente colaAux = new ColaExpediente();
+        boolean encontradoYFinalizado = false;
+
+        while (!estaVacia()) {
+            Expediente expedienteActual = desencolar();
+            if (expedienteActual.getId().equals(expedienteId) && expedienteActual.isFinalizado()) {
+                encontradoYFinalizado = true;
+            } else {
+                colaAux.encolar(expedienteActual);
+            }
+        }
+
+        while (!colaAux.estaVacia()) {
+            encolar(colaAux.desencolar());
+        }
+
+        if (encontradoYFinalizado) {
+            System.out.println("Expediente " + expedienteId + " procesado y removido.");
+        } else {
+            System.out.println("Expediente " + expedienteId + " no encontrado o no finalizado.");
+        }
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
         NodoCola current = front;
         while (current != null) {
-            if (current.expediente.getId().equals(expedienteId)) {
-                return current.expediente;
-            }
+            sb.append(current.expediente.toString()).append("\n");
             current = current.next;
         }
-        return null;
+        return sb.toString();
     }
-
 }

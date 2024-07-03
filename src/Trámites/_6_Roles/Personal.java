@@ -93,4 +93,11 @@ public class Personal extends Usuario {
         this.DependenciaID = DependenciaID;
     }
     
+    @Override
+    public String toString() {
+        
+        return this.Apellido + ", " + this.Nombre + " (" + this.DNI + ")";
+        
+    }
+    
 }

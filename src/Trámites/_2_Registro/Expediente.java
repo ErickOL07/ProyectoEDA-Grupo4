@@ -18,6 +18,7 @@ public class Expediente {
     private String documentoReferencia;
     private Trámite trámite;
     private ListaEnlazada<Movimiento> movimientos;
+    private boolean finalizado;
 
     public Expediente(Dependencia dependencia, boolean prioridad, Usuario datosInteresado, String asunto, String documentoReferencia) {
         this.dependencia = dependencia;
@@ -26,7 +27,9 @@ public class Expediente {
         this.asunto = asunto;
         this.documentoReferencia = documentoReferencia;
         this.movimientos = new ListaEnlazada<>();
-    }
+        this.trámite = new Trámite();
+        this.finalizado = false;
+        }
 
     public ListaEnlazada<Movimiento> getMovimientos() {
         return movimientos;
@@ -51,6 +54,14 @@ public class Expediente {
         return movs;
     }
 
+    public boolean isFinalizado() {
+        return finalizado;
+    }
+
+    public void setFinalizado(boolean finalizado) {
+        this.finalizado = finalizado;
+    }
+    
     public Dependencia getDependencia() {
         return dependencia;
     }
@@ -115,11 +126,17 @@ public class Expediente {
         this.documentoReferencia = documentoReferencia;
     }
     
-    public void ID(int num) {
-        DecimalFormat df = new DecimalFormat("0000000000");
-        
-        this.id = this.dependencia.getID() + df.format(num);
-        
+    
+    @Override
+    public String toString() {
+        return "Expediente{" +
+                "id='" + id + '\'' +
+                ", prioridad=" + prioridad +
+                ", asunto='" + asunto + '\'' +
+                ", dependencia=" + dependencia +
+                ", datosInteresado=" + datosInteresado +
+                ", documentoReferencia='" + documentoReferencia + '\'' +
+                '}';
     }
         
 }

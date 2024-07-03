@@ -55,7 +55,7 @@ public class VistaPersonal extends javax.swing.JFrame {
             .addGroup(EncabezadoLayout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel2)
-                .addContainerGap(1491, Short.MAX_VALUE))
+                .addContainerGap(1500, Short.MAX_VALUE))
         );
         EncabezadoLayout.setVerticalGroup(
             EncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,9 +127,9 @@ public class VistaPersonal extends javax.swing.JFrame {
                             .addComponent(jLabel1)
                             .addComponent(RegistrarIngreso)
                             .addComponent(RegistrarMovimiento))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 584, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3))
         );
         layout.setVerticalGroup(
@@ -149,7 +149,7 @@ public class VistaPersonal extends javax.swing.JFrame {
                                 .addGap(42, 42, 42)
                                 .addComponent(RegistrarFinalización))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
+                        .addGap(39, 39, 39)
                         .addComponent(IniciarTrámitePersonal))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

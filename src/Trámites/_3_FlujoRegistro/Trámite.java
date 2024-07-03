@@ -5,9 +5,10 @@ import TDA.*;
 public class Trámite {
     private String fechaHoraInicio;
     private String fechaHoraFinalizacion;
-    private ListaEnlazada documento;
+    private ListaEnlazada<String> documento;
 
     public Trámite() {
+        this.documento = new ListaEnlazada<>();
     }
     
     public void adjuntarDocumento(String documento) {
