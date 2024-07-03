@@ -15,19 +15,20 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-
 public class VistaAdmin extends javax.swing.JFrame {
 
     private Acceso acceso;
     private DefaultTableModel modeloTabla;
-    private Usuario u;
-    CuentasUsuarioAdmin CuentasUsuarioAdminFrame = new CuentasUsuarioAdmin(this);
+    private Usuario u1;
+    private CuentasUsuarioAdmin cuentasUsuarioAdminFrame;
 
     public VistaAdmin(Acceso acceso) {
         this.acceso = acceso;
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        cuentasUsuarioAdminFrame = new CuentasUsuarioAdmin();
 
         ButtonGroup grupoRadioButtons = new ButtonGroup();
         grupoRadioButtons.add(AdminCuentasUsuario);
@@ -36,42 +37,34 @@ public class VistaAdmin extends javax.swing.JFrame {
 
         modeloTabla = new DefaultTableModel();
         jTable1.setModel(modeloTabla);
-        
-        Volver.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                Acceso AccesoFrame = new Acceso();
-                AccesoFrame.setVisible(true);
-                dispose();
-            }
-        });
-        
-        TextoVolver.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                Acceso AccesoFrame = new Acceso();
-                AccesoFrame.setVisible(true);
-                dispose();
-            }
-        });
-        
-        this.u = null;
-        
+
+        cargarCuentasUsuario();
+
         jTable1.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent evt) {
                 int fila = jTable1.rowAtPoint(evt.getPoint());
-                if (jTable1.getColumnCount() > 1) {
-                    correo = jTable1.getValueAt(fila, 2).toString();
-                    u = Datos.buscarUsuario(correo);
-                    if (u instanceof Admin) {
-                        CuentasUsuarioAdminFrame.setVisible(true);
+                if (fila >= 0 && jTable1.getColumnCount() > 1) {
+                    String correo = jTable1.getValueAt(fila, 2).toString();
+                    u1 = Datos.buscarUsuario(correo);
+                    if (u1 instanceof Admin) {
+                        cuentasUsuarioAdminFrame.setNombre(((Admin) u1).getNombre());
+                        cuentasUsuarioAdminFrame.setApellido(((Admin) u1).getApellido());
+                        cuentasUsuarioAdminFrame.setDNI(((Admin) u1).getDNI());
+                        cuentasUsuarioAdminFrame.setCorreo(((Admin) u1).getCorreo());
+                        cuentasUsuarioAdminFrame.setContraseña(((Admin) u1).getContraseña());
+                        cuentasUsuarioAdminFrame.setVisible(true);
                     }
                 }
             }
         });
-        
     }
-    
+
+    public VistaAdmin(String correo) {
+        this.u1 = Datos.buscarUsuario(correo);
+    }
+
     private void cargarCuentasUsuario() {
-        crear = " cuenta de usuario";
         modeloTabla.setRowCount(0);
         modeloTabla.setColumnIdentifiers(new String[]{"#", "Tipo", "Email"});
 
@@ -80,152 +73,17 @@ public class VistaAdmin extends javax.swing.JFrame {
         while (ptr != null) {
             Usuario usuario = ptr.getData();
             String tipo = "Desconocido";
-            if(usuario instanceof Admin) {tipo = "Administrador Sistema";}
-            else if(usuario instanceof Institución || usuario instanceof Persona) {tipo = "Interesado";}
-            else if(usuario instanceof Personal) {tipo = "Personal Depedencia";}
+            if (usuario instanceof Admin) {
+                tipo = "Administrador Sistema";
+            } else if (usuario instanceof Institución || usuario instanceof Persona) {
+                tipo = "Interesado";
+            } else if (usuario instanceof Personal) {
+                tipo = "Personal Depedencia";
+            }
             modeloTabla.addRow(new Object[]{id, tipo, usuario.getCorreo()});
             ptr = ptr.getNext();
             id++;
         }
-        
-    }
-    
-    public void setAdmins() {
-        
-        if (u instanceof Admin) {
-                        
-            nombre = ((Admin) u).getNombre();
-            apellido = ((Admin) u).getApellido();
-            DNI = ((Admin) u).getDNI();
-            contraseña = u.getContraseña();
-            CuentasUsuarioAdminFrame.setNombre(nombre);
-            CuentasUsuarioAdminFrame.setApellido(apellido);
-            CuentasUsuarioAdminFrame.setDNI(DNI);
-            CuentasUsuarioAdminFrame.setContraseña(contraseña);
-        }
-        
-    }
-    
-    public String nombre = "", apellido = "", DNI = "", correo = "", contraseña = "", dependenciaID = "", tipo = "", subtipo = "", baseID = "", crear = "";
-
-    private void cargarDependencias() {
-        crear = " dependencia";
-        modeloTabla.setRowCount(0);
-        modeloTabla.setColumnIdentifiers(new String[]{"#", "Dependencia", "Etiqueta"});
-
-        Nodo<Dependencia> ptr = Datos.listaDependencias.getHead();
-        int id = 1;
-        while (ptr != null) {
-            Dependencia dependencia = ptr.getData();
-            modeloTabla.addRow(new Object[]{id, dependencia.toString(), dependencia.getID()});
-            ptr = ptr.getNext();
-            id++;
-        }
-    }
-
-    private void cargarEmpleados() {
-        crear = " empleado";
-        modeloTabla.setRowCount(0);
-        modeloTabla.setColumnIdentifiers(new String[]{"#", "Nombre", "Dependencia"});
-        
-        Nodo<Usuario> ptr = Datos.listaUsuarios.getHead();
-        int id = 1;
-        while (ptr != null) {
-            Usuario usuario = ptr.getData();
-            if (usuario instanceof Personal) {
-                Personal personal = (Personal) usuario;
-                modeloTabla.addRow(new Object[]{id, personal.toString(), Datos.buscarDependencia(personal.getDependenciaID())});
-                id++;
-            }
-            ptr = ptr.getNext();
-        }
-    }
-    
-    public static String extraerDNI(String personal) {
-        int inicio = personal.indexOf('(') + 1;
-        int fin = personal.indexOf(')');
-        String dni = personal.substring(inicio, fin);
-        return dni;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getDNI() {
-        return DNI;
-    }
-
-    public void setDNI(String DNI) {
-        this.DNI = DNI;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
-
-    public String getDependenciaID() {
-        return dependenciaID;
-    }
-
-    public void setDependenciaID(String dependenciaID) {
-        this.dependenciaID = dependenciaID;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getSubtipo() {
-        return subtipo;
-    }
-
-    public void setSubtipo(String subtipo) {
-        this.subtipo = subtipo;
-    }
-
-    public String getBaseID() {
-        return baseID;
-    }
-
-    public void setBaseID(String baseID) {
-        this.baseID = baseID;
-    }
-
-    public String getCrear() {
-        return crear;
-    }
-
-    public void setCrear(String crear) {
-        this.crear = crear;
     }
     
     
@@ -336,7 +194,7 @@ public class VistaAdmin extends javax.swing.JFrame {
 
         IniciarTrámitePersonal2.setBackground(new java.awt.Color(0, 204, 51));
         IniciarTrámitePersonal2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        IniciarTrámitePersonal2.setText("Crear" + crear);
+        IniciarTrámitePersonal2.setText("Crear");
         IniciarTrámitePersonal2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IniciarTrámitePersonal2ActionPerformed(evt);
@@ -356,19 +214,20 @@ public class VistaAdmin extends javax.swing.JFrame {
                                 .addGap(84, 84, 84)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(AdminEmpleados)
-                                            .addComponent(AdminCuentasUsuario)
-                                            .addComponent(AdminDependencias))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addComponent(IniciarTrámitePersonal1)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(IniciarTrámitePersonal2))))
+                                        .addComponent(IniciarTrámitePersonal2))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(AdminEmpleados)
+                                                    .addComponent(AdminCuentasUsuario)
+                                                    .addComponent(AdminDependencias))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jLabel1))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(TextoVolver)
@@ -378,7 +237,7 @@ public class VistaAdmin extends javax.swing.JFrame {
                         .addGap(22, 22, 22)
                         .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(jLabel3))
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1088, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -420,11 +279,9 @@ public class VistaAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_AdminCuentasUsuarioActionPerformed
 
     private void AdminDependenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdminDependenciasActionPerformed
-        cargarDependencias();
     }//GEN-LAST:event_AdminDependenciasActionPerformed
 
     private void AdminEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdminEmpleadosActionPerformed
-        cargarEmpleados();
     }//GEN-LAST:event_AdminEmpleadosActionPerformed
 
     private void IniciarTrámitePersonal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarTrámitePersonal1ActionPerformed
