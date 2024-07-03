@@ -7,12 +7,12 @@ import Trámites._5_Interesados.*;
 import Trámites._6_Roles.*;
 import javax.swing.*;
 
-public class CuentasUsuarioAdmin extends JFrame {
+public class EmpleadosAdmin extends JFrame {
 
     public ListaEnlazada<Dependencia> listaDependencias;
     public ListaEnlazada<Usuario> listaUsuarios;
     
-    public CuentasUsuarioAdmin() {
+    public EmpleadosAdmin() {
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         initComponents();
         
@@ -290,14 +290,26 @@ public class CuentasUsuarioAdmin extends JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmpleadosAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmpleadosAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmpleadosAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmpleadosAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -306,7 +318,7 @@ public class CuentasUsuarioAdmin extends JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CuentasUsuarioAdmin().setVisible(true);
+                new EmpleadosAdmin().setVisible(true);
             }
         });
     }

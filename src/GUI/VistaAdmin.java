@@ -13,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 public class VistaAdmin extends javax.swing.JFrame {
 
@@ -21,6 +20,9 @@ public class VistaAdmin extends javax.swing.JFrame {
     private DefaultTableModel modeloTabla;
     private Usuario u1;
     private CuentasUsuarioAdmin cuentasUsuarioAdminFrame;
+    private CuentasUsuarioPersonal cuentasUsuarioPersonalFrame;
+    private DependenciasAdmin dependenciasAdminFrame;
+    private EmpleadosAdmin empleadosAdminFrame;
 
     public VistaAdmin(Acceso acceso) {
         this.acceso = acceso;
@@ -29,6 +31,9 @@ public class VistaAdmin extends javax.swing.JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         cuentasUsuarioAdminFrame = new CuentasUsuarioAdmin();
+        cuentasUsuarioPersonalFrame = new CuentasUsuarioPersonal();
+        dependenciasAdminFrame = new DependenciasAdmin();
+        empleadosAdminFrame = new EmpleadosAdmin();
 
         ButtonGroup grupoRadioButtons = new ButtonGroup();
         grupoRadioButtons.add(AdminCuentasUsuario);
@@ -54,8 +59,32 @@ public class VistaAdmin extends javax.swing.JFrame {
                         cuentasUsuarioAdminFrame.setCorreo(((Admin) u1).getCorreo());
                         cuentasUsuarioAdminFrame.setContraseña(((Admin) u1).getContraseña());
                         cuentasUsuarioAdminFrame.setVisible(true);
+                    } else if (u1 instanceof Personal) {
+                        cuentasUsuarioPersonalFrame.setNombre(((Personal) u1).getNombre());
+                        cuentasUsuarioPersonalFrame.setApellido(((Personal) u1).getApellido());
+                        cuentasUsuarioPersonalFrame.setDNI(((Personal) u1).getDNI());
+                        cuentasUsuarioPersonalFrame.setDependenciaID(((Personal) u1).getDependenciaID());
+                        cuentasUsuarioPersonalFrame.setCorreo(((Personal) u1).getCorreo());
+                        cuentasUsuarioPersonalFrame.setContraseña(((Personal) u1).getContraseña());
+                        cuentasUsuarioPersonalFrame.setVisible(true);
                     }
                 }
+            }
+        });
+
+        TextoVolver.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                Acceso inicioFrame = new Acceso();
+                inicioFrame.setVisible(true);
+                dispose();
+            }
+        });
+        
+        Volver.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                Acceso inicioFrame = new Acceso();
+                inicioFrame.setVisible(true);
+                dispose();
             }
         });
     }
@@ -78,15 +107,44 @@ public class VistaAdmin extends javax.swing.JFrame {
             } else if (usuario instanceof Institución || usuario instanceof Persona) {
                 tipo = "Interesado";
             } else if (usuario instanceof Personal) {
-                tipo = "Personal Depedencia";
+                tipo = "Personal Dependencia";
             }
             modeloTabla.addRow(new Object[]{id, tipo, usuario.getCorreo()});
             ptr = ptr.getNext();
             id++;
         }
     }
-    
-    
+
+    private void cargarDependencias() {
+        modeloTabla.setRowCount(0);
+        modeloTabla.setColumnIdentifiers(new String[]{"#", "Dependencia", "Código"});
+
+        Nodo<Dependencia> ptr = Datos.listaDependencias.getHead();
+        int id = 1;
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            modeloTabla.addRow(new Object[]{id, dependencia.toString(), dependencia.getID()});
+            ptr = ptr.getNext();
+            id++;
+        }
+    }
+
+    private void cargarEmpleados() {
+        modeloTabla.setRowCount(0);
+        modeloTabla.setColumnIdentifiers(new String[]{"#", "Nombre", "Correo"});
+
+        Nodo<Usuario> ptr = Datos.listaUsuarios.getHead();
+        int id = 1;
+        while (ptr != null) {
+            Usuario usuario = ptr.getData();
+            if (usuario instanceof Personal) {
+                modeloTabla.addRow(new Object[]{id, ((Personal) usuario).toString() + " | " + ((Personal) usuario).getDependenciaID(), usuario.getCorreo()});
+                id++;
+            }
+            ptr = ptr.getNext();
+        }
+    }
+
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -109,6 +167,7 @@ public class VistaAdmin extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         AdminCuentasUsuario.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        AdminCuentasUsuario.setSelected(true);
         AdminCuentasUsuario.setText("Cuentas de usuario");
         AdminCuentasUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -279,9 +338,11 @@ public class VistaAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_AdminCuentasUsuarioActionPerformed
 
     private void AdminDependenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdminDependenciasActionPerformed
+        cargarDependencias();
     }//GEN-LAST:event_AdminDependenciasActionPerformed
 
     private void AdminEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdminEmpleadosActionPerformed
+        cargarEmpleados();
     }//GEN-LAST:event_AdminEmpleadosActionPerformed
 
     private void IniciarTrámitePersonal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarTrámitePersonal1ActionPerformed
@@ -291,7 +352,8 @@ public class VistaAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_IniciarTrámitePersonal1ActionPerformed
 
     private void IniciarTrámitePersonal2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarTrámitePersonal2ActionPerformed
-        // TODO add your handling code here:
+        CrearCuentaUsuario CrearCuentaUsuarioFrame = new CrearCuentaUsuario();
+        CrearCuentaUsuarioFrame.setVisible(true);
     }//GEN-LAST:event_IniciarTrámitePersonal2ActionPerformed
 
     public static void main(String args[]) {

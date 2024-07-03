@@ -72,7 +72,7 @@ public class Registro extends javax.swing.JFrame {
         
         try {
             Integer.parseInt(DNI);
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Debe ingresar un DNI válido.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }

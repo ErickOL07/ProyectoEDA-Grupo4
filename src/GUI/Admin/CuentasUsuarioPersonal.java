@@ -7,17 +7,21 @@ import Trámites._5_Interesados.*;
 import Trámites._6_Roles.*;
 import javax.swing.*;
 
-public class CuentasUsuarioAdmin extends JFrame {
+public class CuentasUsuarioPersonal extends JFrame {
 
     public ListaEnlazada<Dependencia> listaDependencias;
     public ListaEnlazada<Usuario> listaUsuarios;
     
-    public CuentasUsuarioAdmin() {
+    public CuentasUsuarioPersonal() {
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         initComponents();
         
         listaDependencias = Datos.listaDependencias;
         listaUsuarios = Datos.listaUsuarios;
+        
+        // Inicializar los JComboBox con los valores adecuados
+        obtenerTipos();
+        SelTipoDependencia.addActionListener(evt -> obtenerSubtipos());
     }
     
     public void setNombre(String nombre) {
@@ -31,6 +35,27 @@ public class CuentasUsuarioAdmin extends JFrame {
     public void setDNI(String dni) {
         IngresarDNI.setText(dni);
     }
+    
+    public void setDependenciaID(String dependenciaID) {
+        Dependencia dependencia = buscarDependenciaPorID(dependenciaID);
+        if (dependencia != null) {
+            SelTipoDependencia.setSelectedItem(dependencia.getTipo());
+            obtenerSubtipos();
+            SelSubtipoDependencia.setSelectedItem(dependencia.getSubTipo());
+        }
+    }
+
+    private Dependencia buscarDependenciaPorID(String dependenciaID) {
+        Nodo<Dependencia> ptr = listaDependencias.getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getID().equals(dependenciaID)) {
+                return dependencia;
+            }
+            ptr = ptr.getNext();
+        }
+        return null;
+    }
 
     private static String correoInicial;
 
@@ -43,7 +68,6 @@ public class CuentasUsuarioAdmin extends JFrame {
         IngresarContraseña.setText(contraseña);
     }
     
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -61,6 +85,9 @@ public class CuentasUsuarioAdmin extends JFrame {
         jLabel6 = new javax.swing.JLabel();
         IngresarContraseña = new javax.swing.JTextField();
         Cancelar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        SelTipoDependencia = new javax.swing.JComboBox<>();
+        SelSubtipoDependencia = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,22 +148,23 @@ public class CuentasUsuarioAdmin extends JFrame {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel7.setText("Dependencia");
+        jLabel7.setToolTipText("");
+
+        SelTipoDependencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        SelSubtipoDependencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(EliminarUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(Cancelar))
-                    .addComponent(GuardarCambios))
-                .addGap(37, 37, 37))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(jLabel3))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(87, 87, 87)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,11 +184,22 @@ public class CuentasUsuarioAdmin extends JFrame {
                             .addComponent(jLabel6)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(115, 115, 115)
-                                .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel3)))
+                                .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(EliminarUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Cancelar)
+                    .addComponent(GuardarCambios))
+                .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,13 +226,19 @@ public class CuentasUsuarioAdmin extends JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(Cancelar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(GuardarCambios)
                     .addComponent(EliminarUsuario))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addGap(35, 35, 35))
         );
 
         pack();
@@ -204,7 +249,27 @@ public class CuentasUsuarioAdmin extends JFrame {
     }//GEN-LAST:event_IngresarApellidoActionPerformed
 
     private void EliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarUsuarioActionPerformed
-        JOptionPane.showMessageDialog(this, "No puede eliminar a otro administrador.", "Error", JOptionPane.ERROR_MESSAGE);
+        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        Nodo<Usuario> prev = null;
+
+        while (ptr != null) {
+            Usuario usuario = ptr.getData();
+            if (usuario.getCorreo().equals(correoInicial)) {
+                if (prev == null) {
+                    // Eliminar cabeza de la lista
+                    listaUsuarios.insertar(ptr.getNext().getData());
+                } else {
+                    // Eliminar nodo en medio o al final de la lista
+                    prev.setNext(ptr.getNext());
+                }
+                JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente.");
+                this.setVisible(false);
+                return;
+            }
+            prev = ptr;
+            ptr = ptr.getNext();
+        }
+        JOptionPane.showMessageDialog(this, "Usuario no encontrado.");
     }//GEN-LAST:event_EliminarUsuarioActionPerformed
 
     private void GuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarCambiosActionPerformed
@@ -276,6 +341,33 @@ public class CuentasUsuarioAdmin extends JFrame {
         return c > 1;
     }
     
+    public ListaEnlazada<Dependencia> getListaDependencias() {
+        return listaDependencias;
+    }
+    
+    private void obtenerTipos() {
+        Nodo<Dependencia> ptr = listaDependencias.getHead();
+        SelTipoDependencia.removeAllItems();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            SelTipoDependencia.addItem(dependencia.getTipo());
+            ptr = ptr.getNext();
+        }
+    }
+
+    private void obtenerSubtipos() {
+        String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
+        SelSubtipoDependencia.removeAllItems();
+        Nodo<Dependencia> ptr = listaDependencias.getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipoSeleccionado)) {
+                SelSubtipoDependencia.addItem(dependencia.getSubTipo());
+            }
+            ptr = ptr.getNext();
+        }
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -290,14 +382,18 @@ public class CuentasUsuarioAdmin extends JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CuentasUsuarioPersonal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CuentasUsuarioPersonal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CuentasUsuarioPersonal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CuentasUsuarioPersonal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -306,7 +402,7 @@ public class CuentasUsuarioAdmin extends JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CuentasUsuarioAdmin().setVisible(true);
+                new CuentasUsuarioPersonal().setVisible(true);
             }
         });
     }
@@ -320,11 +416,14 @@ public class CuentasUsuarioAdmin extends JFrame {
     private javax.swing.JTextField IngresarCorreo;
     private javax.swing.JTextField IngresarDNI;
     private final javax.swing.JTextField IngresarNombre = new javax.swing.JTextField();
+    private javax.swing.JComboBox<String> SelSubtipoDependencia;
+    private javax.swing.JComboBox<String> SelTipoDependencia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     // End of variables declaration//GEN-END:variables
 }
