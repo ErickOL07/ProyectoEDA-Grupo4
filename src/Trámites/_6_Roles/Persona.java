@@ -46,4 +46,12 @@ public class Persona extends Usuario {
         
     }
     
+    @Override
+    public String verInfo() {
+        
+        return this.Apellido + ", " + this.Nombre + " (DNI " + this.DNI + ")\nCorreo: "
+                + this.getCorreo();
+        
+    }
+    
 }

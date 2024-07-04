@@ -25,6 +25,14 @@ public class CrearCuentaUsuario2 extends javax.swing.JFrame {
         listaUsuarios = Datos.listaUsuarios;
         
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        
+        RealizarRegistroComoUsuarioPersonal.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                CrearCuentaUsuario CrearCuentaUsuarioFrame = new CrearCuentaUsuario();
+                CrearCuentaUsuarioFrame.setVisible(true);
+                dispose();
+            }
+        });
     }
     
     private void registrarUsuario() {
@@ -53,7 +61,6 @@ public class CrearCuentaUsuario2 extends javax.swing.JFrame {
         this.listaUsuarios.insertar(nuevoUsuario);
 
         JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        new Acceso().setVisible(true);
         this.dispose();
     }
     
@@ -83,7 +90,7 @@ public class CrearCuentaUsuario2 extends javax.swing.JFrame {
         IngresarContraseña2 = new javax.swing.JTextField();
         Registrarse = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
-        RealizarRegistroComoInstitución = new javax.swing.JLabel();
+        RealizarRegistroComoUsuarioPersonal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -147,9 +154,9 @@ public class CrearCuentaUsuario2 extends javax.swing.JFrame {
             }
         });
 
-        RealizarRegistroComoInstitución.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        RealizarRegistroComoInstitución.setForeground(new java.awt.Color(255, 102, 0));
-        RealizarRegistroComoInstitución.setText("Realizar registro como usuario personal");
+        RealizarRegistroComoUsuarioPersonal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        RealizarRegistroComoUsuarioPersonal.setForeground(new java.awt.Color(255, 102, 0));
+        RealizarRegistroComoUsuarioPersonal.setText("Realizar registro como usuario personal");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -175,7 +182,7 @@ public class CrearCuentaUsuario2 extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(RealizarRegistroComoInstitución)
+                                .addComponent(RealizarRegistroComoUsuarioPersonal)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(Registrarse)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -205,9 +212,11 @@ public class CrearCuentaUsuario2 extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
-                    .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -215,7 +224,7 @@ public class CrearCuentaUsuario2 extends javax.swing.JFrame {
                 .addGap(110, 110, 110)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Registrarse)
-                    .addComponent(RealizarRegistroComoInstitución))
+                    .addComponent(RealizarRegistroComoUsuarioPersonal))
                 .addGap(43, 43, 43))
         );
 
@@ -302,7 +311,7 @@ public class CrearCuentaUsuario2 extends javax.swing.JFrame {
     private javax.swing.JTextField IngresarContraseña2;
     private javax.swing.JTextField IngresarCorreo;
     private javax.swing.JTextField IngresarNombre;
-    private javax.swing.JLabel RealizarRegistroComoInstitución;
+    private javax.swing.JLabel RealizarRegistroComoUsuarioPersonal;
     private javax.swing.JButton Registrarse;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

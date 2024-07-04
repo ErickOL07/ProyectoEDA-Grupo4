@@ -7,12 +7,12 @@ import Trámites._5_Interesados.*;
 import Trámites._6_Roles.*;
 import javax.swing.*;
 
-public class EmpleadosAdmin extends JFrame {
+public class CuentasUsuarioAdmin2 extends JFrame {
 
     public ListaEnlazada<Dependencia> listaDependencias;
     public ListaEnlazada<Usuario> listaUsuarios;
     
-    public EmpleadosAdmin() {
+    public CuentasUsuarioAdmin2() {
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         initComponents();
         
@@ -20,16 +20,11 @@ public class EmpleadosAdmin extends JFrame {
         listaUsuarios = Datos.listaUsuarios;
     }
     
+    private static String nombreInicial;
+    
     public void setNombre(String nombre) {
         IngresarNombre.setText(nombre);
-    }
-
-    public void setApellido(String apellido) {
-        IngresarApellido.setText(apellido);
-    }
-
-    public void setDNI(String dni) {
-        IngresarDNI.setText(dni);
+        nombreInicial = IngresarNombre.getText();
     }
 
     private static String correoInicial;
@@ -51,11 +46,7 @@ public class EmpleadosAdmin extends JFrame {
         EliminarUsuario = new javax.swing.JButton();
         GuardarCambios = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        IngresarApellido = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        IngresarDNI = new javax.swing.JTextField();
         IngresarCorreo = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -87,23 +78,9 @@ public class EmpleadosAdmin extends JFrame {
         jLabel1.setText("Nombre");
         jLabel1.setToolTipText("");
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel2.setText("Apellido");
-        jLabel2.setToolTipText("");
-
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel3.setText("Edición de datos de usuario");
         jLabel3.setToolTipText("");
-
-        IngresarApellido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarApellidoActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel4.setText("DNI");
-        jLabel4.setToolTipText("");
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel5.setText("Correo");
@@ -128,57 +105,44 @@ public class EmpleadosAdmin extends JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(EliminarUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(Cancelar))
-                    .addComponent(GuardarCambios))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
+                .addComponent(GuardarCambios)
                 .addGap(37, 37, 37))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Cancelar)
+                .addGap(15, 15, 15))
             .addGroup(layout.createSequentialGroup()
+                .addGap(51, 51, 51)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
+                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel1)
-                                        .addComponent(jLabel2))
-                                    .addComponent(jLabel4))
-                                .addGap(43, 43, 43)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel6)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(43, 43, 43)
+                                .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(115, 115, 115)
-                                .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel3)))
-                .addContainerGap(52, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(12, 12, 12)
+                .addComponent(Cancelar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
@@ -187,9 +151,7 @@ public class EmpleadosAdmin extends JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Cancelar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(111, 111, 111)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(GuardarCambios)
                     .addComponent(EliminarUsuario))
@@ -199,16 +161,30 @@ public class EmpleadosAdmin extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void IngresarApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarApellidoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_IngresarApellidoActionPerformed
-
     private void EliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarUsuarioActionPerformed
-        JOptionPane.showMessageDialog(this, "No puede eliminar a otro administrador.", "Error", JOptionPane.ERROR_MESSAGE);
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
+            Nodo<Usuario> prev = null;
+
+            while (ptr != null) {
+                Usuario usuario = ptr.getData();
+                if (usuario.getCorreo().equals(correoInicial)) {
+                    if (prev == null) {
+                        Datos.getListaUsuarios().insertar(ptr.getNext().getData());
+                    } else {
+                        prev.setNext(ptr.getNext());
+                    }
+                    JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente.");
+                    this.setVisible(false);
+                    return;
+                }
+                prev = ptr;
+                ptr = ptr.getNext();
+            }
+            JOptionPane.showMessageDialog(this, "Usuario no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_EliminarUsuarioActionPerformed
 
     private void GuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarCambiosActionPerformed
-        if (IngresarNombre.getText().isEmpty() || IngresarApellido.getText().isEmpty() || IngresarDNI.getText().isEmpty() || IngresarCorreo.getText().isEmpty() || IngresarContraseña.getText().isEmpty()) {
+        if (IngresarNombre.getText().isEmpty() || IngresarCorreo.getText().isEmpty() || IngresarContraseña.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -218,13 +194,8 @@ public class EmpleadosAdmin extends JFrame {
             return;
         }
         
-        if (IngresarDNI.getText().length() != 8) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un DNI válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        if (verificarDNI(IngresarDNI.getText())) {
-            JOptionPane.showMessageDialog(this, "El DNI ya ha sido utilizado.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (verificarNombre(IngresarNombre.getText())) {
+            JOptionPane.showMessageDialog(this, "El nombre ya ha sido utilizado para otra institución.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -232,18 +203,9 @@ public class EmpleadosAdmin extends JFrame {
             JOptionPane.showMessageDialog(this, "Ese correo ya fue utilizado.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        try {
-            Integer.parseInt(IngresarDNI.getText());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un DNI válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-            ((Admin) Datos.buscarUsuario(correoInicial)).setNombre(IngresarNombre.getText());
-            ((Admin) Datos.buscarUsuario(correoInicial)).setApellido(IngresarApellido.getText());
-            ((Admin) Datos.buscarUsuario(correoInicial)).setContraseña(IngresarContraseña.getText());
-            ((Admin) Datos.buscarUsuario(correoInicial)).setDNI(IngresarDNI.getText());
-            ((Admin) Datos.buscarUsuario(correoInicial)).setCorreo(IngresarCorreo.getText());
+            ((Institución) Datos.buscarUsuario(correoInicial)).setNombre(IngresarNombre.getText());
+            ((Institución) Datos.buscarUsuario(correoInicial)).setContraseña(IngresarContraseña.getText());
+            ((Institución) Datos.buscarUsuario(correoInicial)).setCorreo(IngresarCorreo.getText());
         JOptionPane.showMessageDialog(this, "Datos guardados con éxito.", "Información", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
     }//GEN-LAST:event_GuardarCambiosActionPerformed
@@ -252,28 +214,28 @@ public class EmpleadosAdmin extends JFrame {
         this.dispose();
     }//GEN-LAST:event_CancelarActionPerformed
 
-    private boolean verificarDNI(String DNI) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+    private boolean verificarNombre(String nombre) {
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
         int c = 0;
         while (ptr != null) {
-            if (ptr.getData() instanceof Admin && ((Admin) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Persona && ((Persona) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Personal && ((Personal) ptr.getData()).getDNI().equals(DNI)) {
+            if ((ptr.getData() instanceof Institución && ((Institución) ptr.getData()).getNombre().equals(nombre) && !((Institución) ptr.getData()).getNombre().equals(nombreInicial))) {
                 c++;
             }
             ptr = ptr.getNext();
         }
-        return c > 1;
+        return c > 0;
     }
     
     private boolean verificarCorreo(String correo) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
         int c = 0;
         while (ptr != null) {
-            if (ptr.getData().getCorreo().equals(correo)) {
+            if (ptr.getData().getCorreo().equals(correo) && !ptr.getData().getCorreo().equals(correoInicial)) {
                 c++;
             }
             ptr = ptr.getNext();
         }
-        return c > 1;
+        return c > 0;
     }
     
     public static void main(String args[]) {
@@ -290,22 +252,14 @@ public class EmpleadosAdmin extends JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EmpleadosAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EmpleadosAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EmpleadosAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EmpleadosAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CuentasUsuarioAdmin2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -318,7 +272,7 @@ public class EmpleadosAdmin extends JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EmpleadosAdmin().setVisible(true);
+                new CuentasUsuarioAdmin2().setVisible(true);
             }
         });
     }
@@ -327,15 +281,11 @@ public class EmpleadosAdmin extends JFrame {
     private javax.swing.JButton Cancelar;
     private javax.swing.JButton EliminarUsuario;
     private javax.swing.JButton GuardarCambios;
-    private javax.swing.JTextField IngresarApellido;
     private javax.swing.JTextField IngresarContraseña;
     private javax.swing.JTextField IngresarCorreo;
-    private javax.swing.JTextField IngresarDNI;
     private final javax.swing.JTextField IngresarNombre = new javax.swing.JTextField();
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     // End of variables declaration//GEN-END:variables

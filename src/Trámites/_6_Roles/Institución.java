@@ -26,4 +26,12 @@ public class Institución extends Usuario {
         
     }
 
+    @Override
+    public String verInfo() {
+        
+        return "Institución: " + this.Nombre + "\nCorreo: "
+                + this.getCorreo();
+        
+    }
+    
 }

@@ -1,90 +1,63 @@
 package GUI.Admin;
 
-import GUI.*;
 import TDA.*;
 import Trámites.*;
 import Trámites._1_Inicio.*;
-import Trámites._5_Interesados.*;
-import Trámites._6_Roles.*;
-import java.awt.Desktop;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.net.URI;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class CrearDependencia extends javax.swing.JFrame {
 
-    public ListaEnlazada<Dependencia> listaDependencias;
-    public ListaEnlazada<Usuario> listaUsuarios;
-
     public CrearDependencia() {
         initComponents();
-        
-        listaDependencias = Datos.listaDependencias;
-        listaUsuarios = Datos.listaUsuarios;
         
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
     
-    private void registrarUsuario() {
-        String nombre = IngresarNombre.getText();
-        String apellido = IngresarApellido.getText();
-        String DNI = IngresarDNI.getText();
-        String correo = IngresarCorreo.getText();
-        String contraseña = IngresarContraseña.getText();
-        String repetirContraseña = IngresarContraseña2.getText();
+    private void registrarDependencia() {
+        String tipo = IngresarTipo.getText();
+        String subtipo = IngresarSubtipo.getText();
+        String baseID = IngresarIDBase.getText();
 
-        if (nombre.isEmpty() || apellido.isEmpty() || DNI.isEmpty() || correo.isEmpty() || contraseña.isEmpty() || repetirContraseña.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (!contraseña.equals(repetirContraseña)) {
-            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (tipo.isEmpty() || baseID.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete los campos \"Tipo\" e \"ID Base\".", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
-        if (!correo.contains("@")) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar una dirección de correo electrónico válida.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (verificarID(baseID)) {
+            JOptionPane.showMessageDialog(this, "La ID Base ya ha sido utilizado.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
-        if (DNI.length() != 8) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un DNI válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        if (!subtipo.isEmpty()){
+            if (verificarTipo(tipo + ", "+ subtipo)) {
+                JOptionPane.showMessageDialog(this, "La dependencia ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            if (verificarTipo(tipo)) {
+                JOptionPane.showMessageDialog(this, "La dependencia ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
-        
-        if (verificarDNI(DNI)) {
-            JOptionPane.showMessageDialog(this, "El DNI ya ha sido utilizado.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        if (verificarCorreo(correo)) {
-            JOptionPane.showMessageDialog(this, "Ese correo ya fue utilizado.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        try {
-            Integer.parseInt(DNI);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un DNI válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+       
+        Dependencia nuevaDependencia = null;
+        if (!subtipo.isEmpty()){
+            nuevaDependencia = new Dependencia(tipo, subtipo, baseID);
+        } else {
+            nuevaDependencia = new Dependencia(tipo, baseID);
         }
 
-        Usuario nuevoUsuario = new Persona(nombre, apellido, DNI, correo, contraseña);
+        Datos.getListaDependencias().insertar(nuevaDependencia);
 
-        this.listaUsuarios.insertar(nuevoUsuario);
-
-        JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        new Acceso().setVisible(true);
+        JOptionPane.showMessageDialog(this, "Dependencia registrada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
     }
     
-    private boolean verificarDNI(String DNI) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+    private boolean verificarID(String baseID) {
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
         while (ptr != null) {
-            if (ptr.getData() instanceof Admin && ((Admin) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Persona && ((Persona) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Personal && ((Personal) ptr.getData()).getDNI().equals(DNI)) {
+            if (ptr.getData().getID().equals(baseID)) {
                 return true;
             }
             ptr = ptr.getNext();
@@ -92,16 +65,16 @@ public class CrearDependencia extends javax.swing.JFrame {
         return false;
     }
     
-    private boolean verificarCorreo(String correo) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+    private boolean verificarTipo(String toStringInicial) {
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
         while (ptr != null) {
-            if (ptr.getData().getCorreo().equals(correo)) {
+            if (ptr.getData().toString().equals(toStringInicial)) {
                 return true;
             }
             ptr = ptr.getNext();
         }
         return false;
-    }      
+    }     
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -110,90 +83,54 @@ public class CrearDependencia extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        IngresarNombre = new javax.swing.JTextField();
+        IngresarTipo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        IngresarApellido = new javax.swing.JTextField();
-        IngresarDNI = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        IngresarCorreo = new javax.swing.JTextField();
-        IngresarContraseña = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        IngresarContraseña2 = new javax.swing.JTextField();
-        Registrarse = new javax.swing.JButton();
+        IngresarSubtipo = new javax.swing.JTextField();
+        IngresarIDBase = new javax.swing.JTextField();
+        Registrar = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel2.setText("Creación de usuario");
+        jLabel2.setText("Creación de dependencia");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel5.setText("DNI");
+        jLabel5.setText("ID Base");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setText("Nombre");
+        jLabel4.setText("Tipo");
 
-        IngresarNombre.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        IngresarNombre.addActionListener(new java.awt.event.ActionListener() {
+        IngresarTipo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        IngresarTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarNombreActionPerformed(evt);
+                IngresarTipoActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Apellido");
+        jLabel3.setText("Subtipo");
 
-        IngresarApellido.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        IngresarApellido.addActionListener(new java.awt.event.ActionListener() {
+        IngresarSubtipo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        IngresarSubtipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarApellidoActionPerformed(evt);
+                IngresarSubtipoActionPerformed(evt);
             }
         });
 
-        IngresarDNI.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        IngresarDNI.addActionListener(new java.awt.event.ActionListener() {
+        IngresarIDBase.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        IngresarIDBase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarDNIActionPerformed(evt);
+                IngresarIDBaseActionPerformed(evt);
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setText("Correo");
-
-        IngresarCorreo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        IngresarCorreo.addActionListener(new java.awt.event.ActionListener() {
+        Registrar.setBackground(new java.awt.Color(255, 153, 0));
+        Registrar.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        Registrar.setText("Registrar");
+        Registrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarCorreoActionPerformed(evt);
-            }
-        });
-
-        IngresarContraseña.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        IngresarContraseña.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarContraseñaActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel7.setText("Contraseña");
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel8.setText("Repetir contraseña");
-
-        IngresarContraseña2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        IngresarContraseña2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarContraseña2ActionPerformed(evt);
-            }
-        });
-
-        Registrarse.setBackground(new java.awt.Color(255, 153, 0));
-        Registrarse.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        Registrarse.setText("Registrar");
-        Registrarse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RegistrarseActionPerformed(evt);
+                RegistrarActionPerformed(evt);
             }
         });
 
@@ -210,105 +147,82 @@ public class CrearDependencia extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel7)
-                                .addComponent(jLabel8))
-                            .addGap(46, 46, 46)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(IngresarCorreo)
-                                .addComponent(IngresarContraseña)
-                                .addComponent(IngresarContraseña2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel5))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(209, 209, 209)
+                        .addComponent(Registrar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(156, 156, 156)
-                        .addComponent(Registrarse)
-                        .addGap(91, 91, 91)
-                        .addComponent(Cancelar)))
-                .addContainerGap(71, Short.MAX_VALUE))
+                        .addGap(86, 86, 86)
+                        .addComponent(jLabel2)))
+                .addContainerGap(75, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(Cancelar)
+                        .addGap(16, 16, 16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(46, 46, 46))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(IngresarTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(IngresarSubtipo, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(IngresarIDBase, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(115, 115, 115))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(Cancelar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(20, 20, 20))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(IngresarTipo)
+                        .addGap(16, 16, 16)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(IngresarSubtipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(IngresarIDBase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(IngresarContraseña2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Registrarse)
-                    .addComponent(Cancelar))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addComponent(Registrar)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void IngresarNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarNombreActionPerformed
+    private void IngresarTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarTipoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_IngresarNombreActionPerformed
+    }//GEN-LAST:event_IngresarTipoActionPerformed
 
-    private void IngresarApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarApellidoActionPerformed
+    private void IngresarSubtipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarSubtipoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_IngresarApellidoActionPerformed
+    }//GEN-LAST:event_IngresarSubtipoActionPerformed
 
-    private void IngresarDNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarDNIActionPerformed
+    private void IngresarIDBaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarIDBaseActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_IngresarDNIActionPerformed
+    }//GEN-LAST:event_IngresarIDBaseActionPerformed
 
-    private void IngresarCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarCorreoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_IngresarCorreoActionPerformed
-
-    private void IngresarContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarContraseñaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_IngresarContraseñaActionPerformed
-
-    private void IngresarContraseña2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarContraseña2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_IngresarContraseña2ActionPerformed
-
-    private void RegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarseActionPerformed
-        registrarUsuario();
-    }//GEN-LAST:event_RegistrarseActionPerformed
+    private void RegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarActionPerformed
+        registrarDependencia();
+    }//GEN-LAST:event_RegistrarActionPerformed
 
     private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
         this.dispose();
@@ -366,19 +280,13 @@ public class CrearDependencia extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancelar;
-    private javax.swing.JTextField IngresarApellido;
-    private javax.swing.JTextField IngresarContraseña;
-    private javax.swing.JTextField IngresarContraseña2;
-    private javax.swing.JTextField IngresarCorreo;
-    private javax.swing.JTextField IngresarDNI;
-    private javax.swing.JTextField IngresarNombre;
-    private javax.swing.JButton Registrarse;
+    private javax.swing.JTextField IngresarIDBase;
+    private javax.swing.JTextField IngresarSubtipo;
+    private javax.swing.JTextField IngresarTipo;
+    private javax.swing.JButton Registrar;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     // End of variables declaration//GEN-END:variables
 }

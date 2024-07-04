@@ -34,6 +34,10 @@ public class Dependencia {
     public String getID() {
         return ID;
     }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
     
     @Override
     public String toString() {

@@ -72,5 +72,13 @@ public class Admin extends Usuario {
         this.DNI = DNI;
     }
     
+    @Override
+    public String verInfo() {
+        
+        return this.Apellido + ", " + this.Nombre + " (DNI " + this.DNI + ")\nCorreo: "
+                + this.getCorreo() + "\nPersonal ULima: Administrador del Sistema de Gestión de Trámite Documentario";
+        
+    }
+    
     
 }

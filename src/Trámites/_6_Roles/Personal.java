@@ -1,5 +1,6 @@
 package Trámites._6_Roles;
 
+import Trámites.Datos;
 import Trámites._1_Inicio.*;
 import Trámites._2_Registro.*;
 import Trámites._4_Seguimiento.*;
@@ -97,6 +98,14 @@ public class Personal extends Usuario {
     public String toString() {
         
         return this.Apellido + ", " + this.Nombre + " (" + this.DNI + ")";
+        
+    }
+    
+    @Override
+    public String verInfo() {
+        
+        return this.Apellido + ", " + this.Nombre + " (DNI " + this.DNI + ")\nCorreo: "
+                + this.getCorreo() + "\nPersonal ULima: " + Datos.buscarDependencia(this.DependenciaID);
         
     }
     

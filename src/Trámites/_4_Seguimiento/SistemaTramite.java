@@ -29,7 +29,7 @@ public class SistemaTramite {
         }
     }
     
-    private String generarID(Dependencia dependencia) {
+    public String generarID(Dependencia dependencia) {
         String prefix = dependencia.getID();
         int counter = listaExpedientes.contar() + 1;
         return String.format("%s%010d", prefix, counter);

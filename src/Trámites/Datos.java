@@ -13,7 +13,7 @@ public class Datos {
     
     public static ListaEnlazada<Dependencia> listaDependencias = new ListaEnlazada<>();
     public static ListaEnlazada<Usuario> listaUsuarios = new ListaEnlazada<>();
-    public static ListaEnlazada<Expediente> expedientesNuevos = new ListaEnlazada<>();
+    public static Cola expedientesNuevos = new Cola<>();
     public static SistemaTramite sistema = new SistemaTramite();
     
     static {
@@ -196,6 +196,24 @@ public class Datos {
         JOptionPane.showMessageDialog(null, "No se encontró el usuario con correo electrónico: " + correo, "Error", JOptionPane.ERROR_MESSAGE);
         return null;
     }
+
+    public static ListaEnlazada<Dependencia> getListaDependencias() {
+        return listaDependencias;
+    }
+
+    public static ListaEnlazada<Usuario> getListaUsuarios() {
+        return listaUsuarios;
+    }
+
+    public static Cola getExpedientesNuevos() {
+        return expedientesNuevos;
+    }
+
+    public static SistemaTramite getSistema() {
+        return sistema;
+    }
+    
+    
 }
     
 

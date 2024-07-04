@@ -109,7 +109,7 @@ public class Acceso extends javax.swing.JFrame {
                     new VistaAdmin(this).setVisible(true);
                 } else if (usuario instanceof Personal) {
                     JOptionPane.showMessageDialog(null, "Hola, " + ((Personal) usuario).getNombre());
-                    new VistaPersonal().setVisible(true);
+                    new VistaPersonal(this).setVisible(true);
                 } else if (usuario instanceof Persona) {
                     JOptionPane.showMessageDialog(null, "Hola, " + ((Persona) usuario).getNombre());
                     new VistaInteresado(this).setVisible(true);
@@ -263,7 +263,7 @@ public class Acceso extends javax.swing.JFrame {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2))
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1053, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         ContenidoLayout.setVerticalGroup(
             ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

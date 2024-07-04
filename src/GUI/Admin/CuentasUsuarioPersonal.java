@@ -9,19 +9,19 @@ import javax.swing.*;
 
 public class CuentasUsuarioPersonal extends JFrame {
 
-    public ListaEnlazada<Dependencia> listaDependencias;
-    public ListaEnlazada<Usuario> listaUsuarios;
-    
     public CuentasUsuarioPersonal() {
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         initComponents();
         
-        listaDependencias = Datos.listaDependencias;
-        listaUsuarios = Datos.listaUsuarios;
-        
-        // Inicializar los JComboBox con los valores adecuados
         obtenerTipos();
-        SelTipoDependencia.addActionListener(evt -> obtenerSubtipos());
+        obtenerSubtipos();
+        SelSubtipoDependencia.setEnabled(false);
+        
+        SelTipoDependencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                obtenerSubtipos();
+            }
+        });
     }
     
     public void setNombre(String nombre) {
@@ -31,9 +31,12 @@ public class CuentasUsuarioPersonal extends JFrame {
     public void setApellido(String apellido) {
         IngresarApellido.setText(apellido);
     }
+    
+    private static String DNIInicial;
 
     public void setDNI(String dni) {
         IngresarDNI.setText(dni);
+        DNIInicial = IngresarDNI.getText();
     }
     
     public void setDependenciaID(String dependenciaID) {
@@ -46,7 +49,7 @@ public class CuentasUsuarioPersonal extends JFrame {
     }
 
     private Dependencia buscarDependenciaPorID(String dependenciaID) {
-        Nodo<Dependencia> ptr = listaDependencias.getHead();
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
         while (ptr != null) {
             Dependencia dependencia = ptr.getData();
             if (dependencia.getID().equals(dependenciaID)) {
@@ -152,61 +155,63 @@ public class CuentasUsuarioPersonal extends JFrame {
         jLabel7.setText("Dependencia");
         jLabel7.setToolTipText("");
 
-        SelTipoDependencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        SelSubtipoDependencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Cancelar)
+                .addGap(17, 17, 17))
             .addGroup(layout.createSequentialGroup()
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jLabel3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel1)
-                                        .addComponent(jLabel2))
-                                    .addComponent(jLabel4))
-                                .addGap(43, 43, 43)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel6)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(115, 115, 115)
-                                .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(52, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(EliminarUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Cancelar)
-                    .addComponent(GuardarCambios))
-                .addGap(40, 40, 40))
+                                    .addComponent(jLabel5)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel1)
+                                                .addComponent(jLabel2))
+                                            .addComponent(jLabel4))
+                                        .addGap(43, 43, 43)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel6)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(115, 115, 115)
+                                        .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addContainerGap(54, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(EliminarUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(GuardarCambios)
+                        .addGap(37, 37, 37))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(14, 14, 14)
+                .addComponent(Cancelar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -227,18 +232,16 @@ public class CuentasUsuarioPersonal extends JFrame {
                     .addComponent(jLabel6)
                     .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(Cancelar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel7))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(GuardarCambios)
                     .addComponent(EliminarUsuario))
-                .addGap(35, 35, 35))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
@@ -249,17 +252,15 @@ public class CuentasUsuarioPersonal extends JFrame {
     }//GEN-LAST:event_IngresarApellidoActionPerformed
 
     private void EliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarUsuarioActionPerformed
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
         Nodo<Usuario> prev = null;
 
         while (ptr != null) {
             Usuario usuario = ptr.getData();
             if (usuario.getCorreo().equals(correoInicial)) {
                 if (prev == null) {
-                    // Eliminar cabeza de la lista
-                    listaUsuarios.insertar(ptr.getNext().getData());
+                    Datos.getListaUsuarios().insertar(ptr.getNext().getData());
                 } else {
-                    // Eliminar nodo en medio o al final de la lista
                     prev.setNext(ptr.getNext());
                 }
                 JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente.");
@@ -273,6 +274,14 @@ public class CuentasUsuarioPersonal extends JFrame {
     }//GEN-LAST:event_EliminarUsuarioActionPerformed
 
     private void GuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarCambiosActionPerformed
+        String nombre = IngresarNombre.getText();
+        String apellido = IngresarApellido.getText();
+        String dni = IngresarDNI.getText();
+        String correo = IngresarCorreo.getText();
+        String contraseña = IngresarContraseña.getText();
+        String tipoDependencia = (String) SelTipoDependencia.getSelectedItem();
+        String subtipoDependencia = (String) SelSubtipoDependencia.getSelectedItem();
+        
         if (IngresarNombre.getText().isEmpty() || IngresarApellido.getText().isEmpty() || IngresarDNI.getText().isEmpty() || IngresarCorreo.getText().isEmpty() || IngresarContraseña.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -304,12 +313,24 @@ public class CuentasUsuarioPersonal extends JFrame {
             JOptionPane.showMessageDialog(this, "Debe ingresar un DNI válido.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-            ((Admin) Datos.buscarUsuario(correoInicial)).setNombre(IngresarNombre.getText());
-            ((Admin) Datos.buscarUsuario(correoInicial)).setApellido(IngresarApellido.getText());
-            ((Admin) Datos.buscarUsuario(correoInicial)).setContraseña(IngresarContraseña.getText());
-            ((Admin) Datos.buscarUsuario(correoInicial)).setDNI(IngresarDNI.getText());
-            ((Admin) Datos.buscarUsuario(correoInicial)).setCorreo(IngresarCorreo.getText());
-        JOptionPane.showMessageDialog(this, "Datos guardados con éxito.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
+        while (ptr != null) {
+            Usuario usuario = ptr.getData();
+            if (usuario.getCorreo().equals(correoInicial)) {
+                ((Personal) usuario).setNombre(nombre);
+                ((Personal) usuario).setApellido(apellido);
+                ((Personal) usuario).setDNI(dni);
+                ((Personal) usuario).setCorreo(correo);
+                ((Personal) usuario).setContraseña(contraseña);
+                Dependencia nuevaDependencia = new Dependencia(tipoDependencia, subtipoDependencia);
+                ((Personal) usuario).setDependenciaID(nuevaDependencia.getID());
+                break;
+            }
+            ptr = ptr.getNext();
+        }
+
+        JOptionPane.showMessageDialog(this, "Cambios guardados correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
     }//GEN-LAST:event_GuardarCambiosActionPerformed
 
@@ -318,54 +339,85 @@ public class CuentasUsuarioPersonal extends JFrame {
     }//GEN-LAST:event_CancelarActionPerformed
 
     private boolean verificarDNI(String DNI) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
+        System.out.println(DNIInicial);
         int c = 0;
         while (ptr != null) {
-            if (ptr.getData() instanceof Admin && ((Admin) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Persona && ((Persona) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Personal && ((Personal) ptr.getData()).getDNI().equals(DNI)) {
+            if ((ptr.getData() instanceof Admin && ((Admin) ptr.getData()).getDNI().equals(DNI) && !((Admin) ptr.getData()).getDNI().equals(DNIInicial)) || (ptr.getData() instanceof Persona && ((Persona) ptr.getData()).getDNI().equals(DNI) && !((Persona) ptr.getData()).getDNI().equals(DNIInicial)) || (ptr.getData() instanceof Personal && ((Personal) ptr.getData()).getDNI().equals(DNI) && !((Personal) ptr.getData()).getDNI().equals(DNIInicial))) {
+                System.out.println(((Personal) ptr.getData()).getDNI());
                 c++;
             }
             ptr = ptr.getNext();
         }
-        return c > 1;
+        return c > 0;
     }
     
     private boolean verificarCorreo(String correo) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
         int c = 0;
         while (ptr != null) {
-            if (ptr.getData().getCorreo().equals(correo)) {
+            if (ptr.getData().getCorreo().equals(correo) && !ptr.getData().getCorreo().equals(correoInicial)) {
                 c++;
             }
             ptr = ptr.getNext();
         }
-        return c > 1;
+        return c > 0;
     }
     
-    public ListaEnlazada<Dependencia> getListaDependencias() {
-        return listaDependencias;
-    }
     
     private void obtenerTipos() {
-        Nodo<Dependencia> ptr = listaDependencias.getHead();
-        SelTipoDependencia.removeAllItems();
+
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
+        ListaEnlazada<Dependencia> L = new ListaEnlazada<>();
         while (ptr != null) {
             Dependencia dependencia = ptr.getData();
-            SelTipoDependencia.addItem(dependencia.getTipo());
+            if (!tipoRepetido(dependencia.getTipo(), L)) {
+                SelTipoDependencia.addItem(dependencia.getTipo());
+                L.insertar(dependencia); 
+            }
             ptr = ptr.getNext();
+        
         }
+        
     }
-
+    
+    private boolean tipoRepetido(String tipo, ListaEnlazada<Dependencia> L) {
+        
+        Nodo<Dependencia> ptr = L.getHead();
+        boolean s = false;
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipo)) {
+                s = true;
+            }
+            ptr = ptr.getNext();
+            
+        }
+        
+        return s;
+    }
+    
     private void obtenerSubtipos() {
         String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
+        
         SelSubtipoDependencia.removeAllItems();
-        Nodo<Dependencia> ptr = listaDependencias.getHead();
+        
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
         while (ptr != null) {
             Dependencia dependencia = ptr.getData();
-            if (dependencia.getTipo().equals(tipoSeleccionado)) {
+            if (dependencia.getTipo().equals(tipoSeleccionado) && dependencia.getSubTipo() != null) {
                 SelSubtipoDependencia.addItem(dependencia.getSubTipo());
             }
             ptr = ptr.getNext();
+        
         }
+        
+        if (SelSubtipoDependencia.getItemCount() > 0) {
+            SelSubtipoDependencia.setEnabled(true);
+        } else {
+            SelSubtipoDependencia.setEnabled(false);
+        }
+        
     }
     
     public static void main(String args[]) {

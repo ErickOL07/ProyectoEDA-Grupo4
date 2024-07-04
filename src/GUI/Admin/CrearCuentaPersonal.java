@@ -15,16 +15,20 @@ import javax.swing.JOptionPane;
 
 public class CrearCuentaPersonal extends javax.swing.JFrame {
 
-    public ListaEnlazada<Dependencia> listaDependencias;
-    public ListaEnlazada<Usuario> listaUsuarios;
 
     public CrearCuentaPersonal() {
-        initComponents();
-        
-        listaDependencias = Datos.listaDependencias;
-        listaUsuarios = Datos.listaUsuarios;
-        
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        initComponents();
+
+        obtenerTipos();
+        obtenerSubtipos();
+        SelSubtipoDependencia.setEnabled(false);
+        
+        SelTipoDependencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                obtenerSubtipos();
+            }
+        });
     }
     
     private void registrarUsuario() {
@@ -74,15 +78,16 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
 
         Usuario nuevoUsuario = new Persona(nombre, apellido, DNI, correo, contraseña);
 
-        this.listaUsuarios.insertar(nuevoUsuario);
+        Datos.getListaUsuarios().insertar(nuevoUsuario);
 
         JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         new Acceso().setVisible(true);
         this.dispose();
     }
-    
+  
+
     private boolean verificarDNI(String DNI) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
         while (ptr != null) {
             if (ptr.getData() instanceof Admin && ((Admin) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Persona && ((Persona) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Personal && ((Personal) ptr.getData()).getDNI().equals(DNI)) {
                 return true;
@@ -93,7 +98,7 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
     }
     
     private boolean verificarCorreo(String correo) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
         while (ptr != null) {
             if (ptr.getData().getCorreo().equals(correo)) {
                 return true;
@@ -101,8 +106,63 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
             ptr = ptr.getNext();
         }
         return false;
-    }      
+    } 
+    
+    private void obtenerTipos() {
 
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
+        ListaEnlazada<Dependencia> L = new ListaEnlazada<>();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (!tipoRepetido(dependencia.getTipo(), L)) {
+                SelTipoDependencia.addItem(dependencia.getTipo());
+                L.insertar(dependencia); 
+            }
+            ptr = ptr.getNext();
+        
+        }
+        
+    }
+    
+    private boolean tipoRepetido(String tipo, ListaEnlazada<Dependencia> L) {
+        
+        Nodo<Dependencia> ptr = L.getHead();
+        boolean s = false;
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipo)) {
+                s = true;
+            }
+            ptr = ptr.getNext();
+            
+        }
+        
+        return s;
+    }
+    
+    private void obtenerSubtipos() {
+        String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
+        
+        SelSubtipoDependencia.removeAllItems();
+        
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipoSeleccionado) && dependencia.getSubTipo() != null) {
+                SelSubtipoDependencia.addItem(dependencia.getSubTipo());
+            }
+            ptr = ptr.getNext();
+        
+        }
+        
+        if (SelSubtipoDependencia.getItemCount() > 0) {
+            SelSubtipoDependencia.setEnabled(true);
+        } else {
+            SelSubtipoDependencia.setEnabled(false);
+        }
+        
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -122,6 +182,9 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
         IngresarContraseña2 = new javax.swing.JTextField();
         Registrarse = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        SelTipoDependencia = new javax.swing.JComboBox<>();
+        SelSubtipoDependencia = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -205,6 +268,22 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel9.setText("Dependencia");
+        jLabel9.setToolTipText("");
+
+        SelTipoDependencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelTipoDependenciaActionPerformed(evt);
+            }
+        });
+
+        SelSubtipoDependencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelSubtipoDependenciaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -213,41 +292,54 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
                 .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel7)
-                                .addComponent(jLabel8))
-                            .addGap(46, 46, 46)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(IngresarCorreo)
-                                .addComponent(IngresarContraseña)
-                                .addComponent(IngresarContraseña2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel5))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel9))
+                                .addGap(46, 46, 46)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(IngresarCorreo)
+                                    .addComponent(IngresarContraseña)
+                                    .addComponent(IngresarContraseña2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addContainerGap(71, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(156, 156, 156)
-                        .addComponent(Registrarse)
-                        .addGap(91, 91, 91)
-                        .addComponent(Cancelar)))
-                .addContainerGap(71, Short.MAX_VALUE))
+                        .addGap(72, 72, 72)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Cancelar)
+                        .addGap(16, 16, 16))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(219, 219, 219)
+                .addComponent(Registrarse)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(Cancelar)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -274,8 +366,11 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
                     .addComponent(IngresarContraseña2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Registrarse)
-                    .addComponent(Cancelar))
+                    .addComponent(jLabel9)
+                    .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(Registrarse)
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
@@ -313,6 +408,14 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
     private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_CancelarActionPerformed
+
+    private void SelSubtipoDependenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelSubtipoDependenciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SelSubtipoDependenciaActionPerformed
+
+    private void SelTipoDependenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelTipoDependenciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SelTipoDependenciaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -373,6 +476,8 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
     private javax.swing.JTextField IngresarDNI;
     private javax.swing.JTextField IngresarNombre;
     private javax.swing.JButton Registrarse;
+    private javax.swing.JComboBox<String> SelSubtipoDependencia;
+    private javax.swing.JComboBox<String> SelTipoDependencia;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -380,5 +485,6 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
 }

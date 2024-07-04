@@ -85,7 +85,7 @@ public class NuevoTrámite extends javax.swing.JFrame {
             
             Expediente nuevoExpediente = new Expediente(dependencia, false, usuarioActual, asunto, documentoReferencia);
 
-            Datos.expedientesNuevos.insertar(nuevoExpediente);
+            Datos.expedientesNuevos.encolar(nuevoExpediente);
 
             JOptionPane.showMessageDialog(this, "Trámite creado con éxito. Se encuentra en revisión.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
@@ -150,35 +150,30 @@ public class NuevoTrámite extends javax.swing.JFrame {
     }
     
     private Dependencia obtenerDependencia() {
-        
         String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
-        Dependencia dep = new Dependencia(null, null, null);
-        if (SelSubtipoDependencia.getItemCount() > 0) {
-            Nodo<Dependencia> ptr = acceso.getListaDependencias().getHead();
-            String subtipoSeleccionado = (String) SelSubtipoDependencia.getSelectedItem();
-            while (ptr != null) {
-                Dependencia dependencia = ptr.getData();
-                if (dependencia.getTipo().equals(tipoSeleccionado)) {
-                    if (dependencia.getSubTipo().equals(subtipoSeleccionado)) {
+        String subtipoSeleccionado = (String) SelSubtipoDependencia.getSelectedItem();
+        Dependencia dep = null;
+
+        Nodo<Dependencia> ptr = acceso.getListaDependencias().getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipoSeleccionado)) {
+                if (subtipoSeleccionado != null && !subtipoSeleccionado.isEmpty()) {
+                    if (dependencia.getSubTipo() != null && dependencia.getSubTipo().equals(subtipoSeleccionado)) {
                         dep = dependencia;
+                        break;
                     }
+                } else {
+                    dep = dependencia;
+                    break;
                 }
-                ptr = ptr.getNext();
-                
             }
-        } else {
-            Nodo<Dependencia> ptr = acceso.getListaDependencias().getHead();
-            while (ptr != null) {
-                Dependencia dependencia = ptr.getData();
-                if (dependencia.getTipo().equals(tipoSeleccionado)) {
-                        dep = dependencia;
-                }
-                ptr = ptr.getNext();
-                
-            }
+            ptr = ptr.getNext();
         }
+
         return dep;
     }
+
 
     private void seleccionarArchivo() {
         JFileChooser fileChooser = new JFileChooser();

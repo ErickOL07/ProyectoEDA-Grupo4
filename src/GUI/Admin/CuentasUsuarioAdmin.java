@@ -27,9 +27,12 @@ public class CuentasUsuarioAdmin extends JFrame {
     public void setApellido(String apellido) {
         IngresarApellido.setText(apellido);
     }
+    
+    private static String DNIInicial;
 
     public void setDNI(String dni) {
         IngresarDNI.setText(dni);
+        DNIInicial = IngresarDNI.getText();
     }
 
     private static String correoInicial;
@@ -129,11 +132,7 @@ public class CuentasUsuarioAdmin extends JFrame {
                 .addGap(38, 38, 38)
                 .addComponent(EliminarUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(Cancelar))
-                    .addComponent(GuardarCambios))
+                .addComponent(GuardarCambios)
                 .addGap(37, 37, 37))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,11 +160,17 @@ public class CuentasUsuarioAdmin extends JFrame {
                         .addGap(52, 52, 52)
                         .addComponent(jLabel3)))
                 .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Cancelar)
+                .addGap(15, 15, 15))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(15, 15, 15)
+                .addComponent(Cancelar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,9 +192,7 @@ public class CuentasUsuarioAdmin extends JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Cancelar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(GuardarCambios)
                     .addComponent(EliminarUsuario))
@@ -204,7 +207,29 @@ public class CuentasUsuarioAdmin extends JFrame {
     }//GEN-LAST:event_IngresarApellidoActionPerformed
 
     private void EliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarUsuarioActionPerformed
-        JOptionPane.showMessageDialog(this, "No puede eliminar a otro administrador.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (Datos.buscarUsuario(IngresarCorreo.getText()) instanceof Admin) {
+            JOptionPane.showMessageDialog(this, "No puede eliminar a otro administrador.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
+            Nodo<Usuario> prev = null;
+
+            while (ptr != null) {
+                Usuario usuario = ptr.getData();
+                if (usuario.getCorreo().equals(correoInicial)) {
+                    if (prev == null) {
+                        Datos.getListaUsuarios().insertar(ptr.getNext().getData());
+                    } else {
+                        prev.setNext(ptr.getNext());
+                    }
+                    JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente.");
+                    this.setVisible(false);
+                    return;
+                }
+                prev = ptr;
+                ptr = ptr.getNext();
+            }
+            JOptionPane.showMessageDialog(this, "Usuario no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_EliminarUsuarioActionPerformed
 
     private void GuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarCambiosActionPerformed
@@ -239,11 +264,20 @@ public class CuentasUsuarioAdmin extends JFrame {
             JOptionPane.showMessageDialog(this, "Debe ingresar un DNI válido.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        if (Datos.buscarUsuario(correoInicial) instanceof Admin) {
             ((Admin) Datos.buscarUsuario(correoInicial)).setNombre(IngresarNombre.getText());
             ((Admin) Datos.buscarUsuario(correoInicial)).setApellido(IngresarApellido.getText());
             ((Admin) Datos.buscarUsuario(correoInicial)).setContraseña(IngresarContraseña.getText());
             ((Admin) Datos.buscarUsuario(correoInicial)).setDNI(IngresarDNI.getText());
             ((Admin) Datos.buscarUsuario(correoInicial)).setCorreo(IngresarCorreo.getText());
+        } else if (Datos.buscarUsuario(correoInicial) instanceof Persona) {
+            ((Persona) Datos.buscarUsuario(correoInicial)).setNombre(IngresarNombre.getText());
+            ((Persona) Datos.buscarUsuario(correoInicial)).setApellido(IngresarApellido.getText());
+            ((Persona) Datos.buscarUsuario(correoInicial)).setContraseña(IngresarContraseña.getText());
+            ((Persona) Datos.buscarUsuario(correoInicial)).setDNI(IngresarDNI.getText());
+            ((Persona) Datos.buscarUsuario(correoInicial)).setCorreo(IngresarCorreo.getText());
+        }
+            
         JOptionPane.showMessageDialog(this, "Datos guardados con éxito.", "Información", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
     }//GEN-LAST:event_GuardarCambiosActionPerformed
@@ -253,27 +287,29 @@ public class CuentasUsuarioAdmin extends JFrame {
     }//GEN-LAST:event_CancelarActionPerformed
 
     private boolean verificarDNI(String DNI) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
+        System.out.println(DNIInicial);
         int c = 0;
         while (ptr != null) {
-            if (ptr.getData() instanceof Admin && ((Admin) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Persona && ((Persona) ptr.getData()).getDNI().equals(DNI) || ptr.getData() instanceof Personal && ((Personal) ptr.getData()).getDNI().equals(DNI)) {
+            if ((ptr.getData() instanceof Admin && ((Admin) ptr.getData()).getDNI().equals(DNI) && !((Admin) ptr.getData()).getDNI().equals(DNIInicial)) || (ptr.getData() instanceof Persona && ((Persona) ptr.getData()).getDNI().equals(DNI) && !((Persona) ptr.getData()).getDNI().equals(DNIInicial)) || (ptr.getData() instanceof Personal && ((Personal) ptr.getData()).getDNI().equals(DNI) && !((Personal) ptr.getData()).getDNI().equals(DNIInicial))) {
+                System.out.println(((Personal) ptr.getData()).getDNI());
                 c++;
             }
             ptr = ptr.getNext();
         }
-        return c > 1;
+        return c > 0;
     }
     
     private boolean verificarCorreo(String correo) {
-        Nodo<Usuario> ptr = listaUsuarios.getHead();
+        Nodo<Usuario> ptr = Datos.getListaUsuarios().getHead();
         int c = 0;
         while (ptr != null) {
-            if (ptr.getData().getCorreo().equals(correo)) {
+            if (ptr.getData().getCorreo().equals(correo) && !ptr.getData().getCorreo().equals(correoInicial)) {
                 c++;
             }
             ptr = ptr.getNext();
         }
-        return c > 1;
+        return c > 0;
     }
     
     public static void main(String args[]) {

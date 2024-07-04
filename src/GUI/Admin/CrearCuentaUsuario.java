@@ -25,6 +25,14 @@ public class CrearCuentaUsuario extends javax.swing.JFrame {
         listaUsuarios = Datos.listaUsuarios;
         
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        
+        RealizarRegistroComoInstitución.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                CrearCuentaUsuario2 CrearCuentaUsuario2Frame = new CrearCuentaUsuario2();
+                CrearCuentaUsuario2Frame.setVisible(true);
+                dispose();
+            }
+        });
     }
     
     private void registrarUsuario() {
@@ -77,7 +85,6 @@ public class CrearCuentaUsuario extends javax.swing.JFrame {
         this.listaUsuarios.insertar(nuevoUsuario);
 
         JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        new Acceso().setVisible(true);
         this.dispose();
     }
     

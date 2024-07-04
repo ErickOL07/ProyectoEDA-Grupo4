@@ -4,23 +4,37 @@
  */
 package GUI;
 
+import Trámites.*;
 import Trámites._6_Roles.*;
+import Trámites._7_Alertas.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class VistaInteresado extends javax.swing.JFrame {
 
     private Acceso acceso;
+    private Alerta alerta;
 
     public VistaInteresado(Acceso acceso) {
         this.acceso = acceso;
+        this.alerta = new Alerta();
         initComponents();
         agregarEventos();
         
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                alerta();
+            }
+        });
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    private void alerta() {
+        JOptionPane.showMessageDialog(this, alerta.expedientesNoAtendidos(Datos.getSistema(), acceso.usuarioActual()), "Alerta automática", JOptionPane.INFORMATION_MESSAGE);
     }
         
     public String nomUsuario() {
@@ -98,7 +112,7 @@ public class VistaInteresado extends javax.swing.JFrame {
                     VistaAdminFrame.setVisible(true);
                     dispose();
                 } else if (acceso.usuarioActual() instanceof Personal) {
-                    VistaPersonal VistaPersonalFrame = new VistaPersonal();
+                    VistaPersonal VistaPersonalFrame = new VistaPersonal(acceso);
                     VistaPersonalFrame.setVisible(true);
                     dispose();
                 } else {
@@ -116,7 +130,7 @@ public class VistaInteresado extends javax.swing.JFrame {
                     VistaAdminFrame.setVisible(true);
                     dispose();
                 } else if (acceso.usuarioActual() instanceof Personal) {
-                    VistaPersonal VistaPersonalFrame = new VistaPersonal();
+                    VistaPersonal VistaPersonalFrame = new VistaPersonal(acceso);
                     VistaPersonalFrame.setVisible(true);
                     dispose();
                 } else {
