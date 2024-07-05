@@ -6,9 +6,13 @@ import Trámites._1_Inicio.*;
 import Trámites._5_Interesados.*;
 import Trámites._6_Roles.*;
 import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.net.URI;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -24,7 +28,35 @@ public class Acceso extends javax.swing.JFrame {
         listaUsuarios = Datos.listaUsuarios;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                resizeComponents();
+            }
+        });
     }
+
+    private void resizeComponents() {
+        Dimension size = getSize();
+        float scale = Math.min(size.width / 1920.0f, size.height / 1080.0f);
+
+        Dimension encabezadoSize = new Dimension((int)(Encabezado.getPreferredSize().width * scale), (int)(Encabezado.getPreferredSize().height * scale));
+        Encabezado.setPreferredSize(encabezadoSize);
+        Encabezado.setMinimumSize(encabezadoSize);
+        Encabezado.setMaximumSize(encabezadoSize);
+
+        Dimension contenidoSize = new Dimension((int)(Contenido.getPreferredSize().width * scale), (int)(Contenido.getPreferredSize().height * scale));
+        Contenido.setPreferredSize(contenidoSize);
+        Contenido.setMinimumSize(contenidoSize);
+        Contenido.setMaximumSize(contenidoSize);
+
+        Encabezado.revalidate();
+        Contenido.revalidate();
+        getContentPane().revalidate();
+        repaint();
+    }
+
+
     
     public ListaEnlazada<Dependencia> getListaDependencias() {
         return listaDependencias;
@@ -173,10 +205,10 @@ public class Acceso extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EncabezadoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(ComunícateConNosotros)
+                .addGap(1014, 1014, 1014)
+                .addComponent(ComunícateConNosotros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(133, 133, 133)
-                .addComponent(InicioUniversidadDeLima)
+                .addComponent(InicioUniversidadDeLima, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(228, 228, 228))
         );
         EncabezadoLayout.setVerticalGroup(
@@ -186,9 +218,9 @@ public class Acceso extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(EncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(InicioUniversidadDeLima)
-                    .addComponent(ComunícateConNosotros))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(InicioUniversidadDeLima, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ComunícateConNosotros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
 
         Contenido.setBackground(new java.awt.Color(0, 0, 0));
@@ -245,25 +277,24 @@ public class Acceso extends javax.swing.JFrame {
                             .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(ContenidoLayout.createSequentialGroup()
                                     .addComponent(jLabel5)
-                                    .addGap(173, 173, 173)
-                                    .addComponent(IngresarCorreo))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(ContenidoLayout.createSequentialGroup()
                                     .addComponent(jLabel4)
-                                    .addGap(108, 108, 108)
-                                    .addComponent(IngresarContraseña)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(Registrarse))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3))
                     .addGroup(ContenidoLayout.createSequentialGroup()
-                        .addGap(0, 327, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel6)
                         .addGap(237, 237, 237))
                     .addGroup(ContenidoLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1053, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel7)))
+                .addGap(41, 41, 41)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         ContenidoLayout.setVerticalGroup(
             ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -274,9 +305,7 @@ public class Acceso extends javax.swing.JFrame {
                         .addComponent(jLabel6)
                         .addGap(101, 101, 101)
                         .addGroup(ContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(ContenidoLayout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(IngresarCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
+                            .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
                         .addGap(101, 101, 101))
                     .addGroup(ContenidoLayout.createSequentialGroup()
@@ -292,7 +321,7 @@ public class Acceso extends javax.swing.JFrame {
                 .addComponent(Registrarse)
                 .addGap(180, 180, 180)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jLabel2)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

@@ -6,6 +6,9 @@ import Trámites.*;
 import Trámites._1_Inicio.*;
 import Trámites._5_Interesados.*;
 import Trámites._6_Roles.*;
+import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ButtonGroup;
@@ -107,6 +110,26 @@ public class VistaAdmin extends javax.swing.JFrame {
             }
         });
         
+    addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                resizeComponents();
+            }
+        });
+    }
+
+    private void resizeComponents() {
+        Dimension size = getSize();
+        float scale = Math.min(size.width / 1920.0f, size.height / 1080.0f);
+
+        Dimension encabezadoSize = new Dimension((int)(Encabezado.getPreferredSize().width * scale), (int)(Encabezado.getPreferredSize().height * scale));
+        Encabezado.setPreferredSize(encabezadoSize);
+        Encabezado.setMinimumSize(encabezadoSize);
+        Encabezado.setMaximumSize(encabezadoSize);
+
+        Encabezado.revalidate();
+        getContentPane().revalidate();
+        repaint();
     }
 
     public VistaAdmin(String correo) {

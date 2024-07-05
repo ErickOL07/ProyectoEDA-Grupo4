@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.9" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Component class="javax.swing.JMenuItem" name="jMenuItem1">
       <Properties>
@@ -64,10 +64,10 @@
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="ComunícateConNosotros" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="1014" max="-2" attributes="0"/>
+                  <Component id="ComunícateConNosotros" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="133" max="-2" attributes="0"/>
-                  <Component id="InicioUniversidadDeLima" min="-2" max="-2" attributes="0"/>
+                  <Component id="InicioUniversidadDeLima" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="228" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -77,12 +77,12 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="InicioUniversidadDeLima" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="ComunícateConNosotros" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="InicioUniversidadDeLima" alignment="3" max="32767" attributes="0"/>
+                      <Component id="ComunícateConNosotros" alignment="3" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="12" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -139,13 +139,13 @@
                               <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="173" max="-2" attributes="0"/>
-                                      <Component id="IngresarCorreo" max="32767" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="IngresarCorreo" min="-2" pref="439" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="108" max="-2" attributes="0"/>
-                                      <Component id="IngresarContraseña" max="32767" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="IngresarContraseña" min="-2" pref="439" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Component id="Registrarse" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -154,18 +154,17 @@
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <EmptySpace min="0" pref="327" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="237" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel2" min="-2" pref="1053" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                  <Component id="jLabel2" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -178,10 +177,7 @@
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="101" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="7" pref="7" max="-2" attributes="0"/>
-                                  <Component id="IngresarCorreo" pref="47" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="IngresarCorreo" alignment="0" min="-2" pref="47" max="-2" attributes="0"/>
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="101" max="-2" attributes="0"/>
@@ -203,7 +199,7 @@
                   <EmptySpace min="-2" pref="180" max="-2" attributes="0"/>
                   <Component id="jLabel7" min="-2" pref="25" max="-2" attributes="0"/>
               </Group>
-              <Component id="jLabel2" alignment="0" pref="0" max="32767" attributes="0"/>
+              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
