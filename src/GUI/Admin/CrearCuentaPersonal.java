@@ -76,12 +76,11 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
             return;
         }
 
-        Usuario nuevoUsuario = new Persona(nombre, apellido, DNI, correo, contraseña);
+        Usuario nuevoUsuario = new Personal(nombre, apellido, DNI, this.obtenerDependencia().getID(), correo, contraseña);
 
         Datos.getListaUsuarios().insertar(nuevoUsuario);
 
         JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        new Acceso().setVisible(true);
         this.dispose();
     }
   
@@ -161,6 +160,31 @@ public class CrearCuentaPersonal extends javax.swing.JFrame {
             SelSubtipoDependencia.setEnabled(false);
         }
         
+    }
+    
+    private Dependencia obtenerDependencia() {
+        String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
+        String subtipoSeleccionado = (String) SelSubtipoDependencia.getSelectedItem();
+        Dependencia dep = null;
+
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipoSeleccionado)) {
+                if (subtipoSeleccionado != null && !subtipoSeleccionado.isEmpty()) {
+                    if (dependencia.getSubTipo() != null && dependencia.getSubTipo().equals(subtipoSeleccionado)) {
+                        dep = dependencia;
+                        break;
+                    }
+                } else {
+                    dep = dependencia;
+                    break;
+                }
+            }
+            ptr = ptr.getNext();
+        }
+
+        return dep;
     }
     
     @SuppressWarnings("unchecked")

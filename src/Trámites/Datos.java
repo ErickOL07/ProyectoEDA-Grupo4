@@ -140,7 +140,7 @@ public class Datos {
         sistema.agregarDocumento("FPP_FCEE_Eco-0000000007", "EvaluacionBeca.pdf");
 
         Expediente expediente8 = new Expediente(buscarDependencia("OAS_Dep-"), 
-                                    false, 
+                                    true, 
                                     buscarUsuario("gfossati@aloe.ulima.edu.pe"),
                                     "Informe de actividades deportivas",
                                     "InformeActividadesDeportivas.pdf");
@@ -170,7 +170,39 @@ public class Datos {
                                     "SolicitudAsesoramientoPsicologico.pdf");
         sistema.registrarExpediente(buscarDependencia("FPP_FP_Psi-"), expediente11);
         sistema.agregarDocumento("FPP_FP_Psi-0000000011", "EvaluacionPsicologica.pdf");
-        
+     
+        Expediente expediente12 = new Expediente(buscarDependencia("FPP_FI_Sis-"), 
+                                    true, 
+                                    buscarUsuario("jdios@aloe.ulima.edu.pe"),
+                                    "Solicitud de actualización de software",
+                                    "SolicitudActualizacionSoftware.pdf");
+        sistema.registrarExpediente(buscarDependencia("FPP_FI_Sis-"), expediente12);
+        sistema.agregarDocumento("FPP_FI_Sis-0000000012", "EvaluacionActualizacion.pdf");
+
+        Expediente expediente13 = new Expediente(buscarDependencia("FPP_FI_Sis-"), 
+                                    false, 
+                                    buscarUsuario("makanaky@gmail.com"),
+                                    "Solicitud de tutoría en programación",
+                                    "SolicitudTutoriaProgramacion.pdf");
+        sistema.registrarExpediente(buscarDependencia("FPP_FI_Sis-"), expediente13);
+        sistema.moverExpediente("FPP_FI_Sis-0000000013", buscarDependencia("FPP_FCEE_Con-"));
+
+        Expediente expediente14 = new Expediente(buscarDependencia("FPP_FI_Sis-"), 
+                                    true, 
+                                    buscarUsuario("gfossati@aloe.ulima.edu.pe"),
+                                    "Solicitud de acceso a laboratorio",
+                                    "SolicitudAccesoLaboratorio.pdf");
+        sistema.registrarExpediente(buscarDependencia("FPP_FI_Sis-"), expediente14);
+        sistema.finalizarExpediente("FPP_FI_Sis-0000000014");
+
+        Expediente expediente15 = new Expediente(buscarDependencia("FPP_FI_Sis-"), 
+                                    false, 
+                                    buscarUsuario("USB@ucv.edu.pe"),
+                                    "Revisión de proyecto de software",
+                                    "RevisionProyectoSoftware.pdf");
+        sistema.registrarExpediente(buscarDependencia("FPP_FI_Sis-"), expediente15);
+        sistema.agregarDocumento("FPP_FI_Sis-0000000015", "InformeRevision.pdf");
+
     }
     
     public static Dependencia buscarDependencia(String baseID) {

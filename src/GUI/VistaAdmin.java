@@ -110,7 +110,7 @@ public class VistaAdmin extends javax.swing.JFrame {
             }
         });
         
-    addComponentListener(new ComponentAdapter() {
+        addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 resizeComponents();

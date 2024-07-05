@@ -49,7 +49,7 @@ public class DependenciasAdmin extends JFrame {
         EliminarUsuario.setBackground(new java.awt.Color(204, 0, 0));
         EliminarUsuario.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         EliminarUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        EliminarUsuario.setText("Eliminar usuario");
+        EliminarUsuario.setText("Eliminar dependencia");
         EliminarUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EliminarUsuarioActionPerformed(evt);

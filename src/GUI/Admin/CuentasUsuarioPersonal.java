@@ -97,7 +97,7 @@ public class CuentasUsuarioPersonal extends JFrame {
         EliminarUsuario.setBackground(new java.awt.Color(204, 0, 0));
         EliminarUsuario.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         EliminarUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        EliminarUsuario.setText("Eliminar usuario");
+        EliminarUsuario.setText("Eliminar empleado");
         EliminarUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EliminarUsuarioActionPerformed(evt);
@@ -122,7 +122,7 @@ public class CuentasUsuarioPersonal extends JFrame {
         jLabel2.setToolTipText("");
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        jLabel3.setText("Edición de datos de usuario");
+        jLabel3.setText("Edición de datos de empleado");
         jLabel3.setToolTipText("");
 
         IngresarApellido.addActionListener(new java.awt.event.ActionListener() {
@@ -167,37 +167,35 @@ public class CuentasUsuarioPersonal extends JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jLabel3))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(52, 52, 52)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(jLabel1)
-                                                .addComponent(jLabel2))
-                                            .addComponent(jLabel4))
-                                        .addGap(43, 43, 43)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jLabel6)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(115, 115, 115)
-                                        .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addContainerGap(54, Short.MAX_VALUE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel2))
+                                    .addComponent(jLabel4))
+                                .addGap(43, 43, 43)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(IngresarDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(IngresarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(IngresarApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(IngresarCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel6)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(115, 115, 115)
+                                .addComponent(IngresarContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(87, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(EliminarUsuario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -238,7 +236,7 @@ public class CuentasUsuarioPersonal extends JFrame {
                         .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel7))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(GuardarCambios)
                     .addComponent(EliminarUsuario))
                 .addContainerGap(31, Short.MAX_VALUE))
@@ -323,8 +321,7 @@ public class CuentasUsuarioPersonal extends JFrame {
                 ((Personal) usuario).setDNI(dni);
                 ((Personal) usuario).setCorreo(correo);
                 ((Personal) usuario).setContraseña(contraseña);
-                Dependencia nuevaDependencia = new Dependencia(tipoDependencia, subtipoDependencia);
-                ((Personal) usuario).setDependenciaID(nuevaDependencia.getID());
+                ((Personal) usuario).setDependenciaID(this.obtenerDependencia().getID());
                 break;
             }
             ptr = ptr.getNext();
@@ -418,6 +415,31 @@ public class CuentasUsuarioPersonal extends JFrame {
             SelSubtipoDependencia.setEnabled(false);
         }
         
+    }
+    
+    private Dependencia obtenerDependencia() {
+        String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
+        String subtipoSeleccionado = (String) SelSubtipoDependencia.getSelectedItem();
+        Dependencia dep = null;
+
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipoSeleccionado)) {
+                if (subtipoSeleccionado != null && !subtipoSeleccionado.isEmpty()) {
+                    if (dependencia.getSubTipo() != null && dependencia.getSubTipo().equals(subtipoSeleccionado)) {
+                        dep = dependencia;
+                        break;
+                    }
+                } else {
+                    dep = dependencia;
+                    break;
+                }
+            }
+            ptr = ptr.getNext();
+        }
+
+        return dep;
     }
     
     public static void main(String args[]) {

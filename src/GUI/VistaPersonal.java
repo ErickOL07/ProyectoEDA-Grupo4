@@ -232,11 +232,15 @@ public class VistaPersonal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RegistrarFinalizaciónActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarFinalizaciónActionPerformed
-        // TODO add your handling code here:
+        RegistrarFinalización RegistrarFinalizaciónFrame = new RegistrarFinalización(acceso);
+        RegistrarFinalizaciónFrame.setVisible(true);
+        dispose();
     }//GEN-LAST:event_RegistrarFinalizaciónActionPerformed
 
     private void RegistrarMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarMovimientoActionPerformed
-        // TODO add your handling code here:
+        RegistrarMovimiento RegistrarMovimientoFrame = new RegistrarMovimiento(acceso);
+        RegistrarMovimientoFrame.setVisible(true);
+        dispose();
     }//GEN-LAST:event_RegistrarMovimientoActionPerformed
 
     private void RegistrarIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarIngresoActionPerformed

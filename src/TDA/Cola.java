@@ -70,4 +70,20 @@ public class Cola<T> {
         }
         return i;
     }
+    
+    @Override
+    public String toString() {
+        String s = "[";
+        Nodo<T> actual = frente;
+        while (actual != null) {
+            s += "\n -"+ actual.getData().toString();
+            if (actual.getNext() != null) {
+                s += ", ";
+            }
+            actual = actual.getNext();
+        }
+        s += "]";
+        return s;
+    }
+
 }

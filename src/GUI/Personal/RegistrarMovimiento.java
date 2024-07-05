@@ -3,21 +3,25 @@ package GUI.Personal;
 import GUI.*;
 import TDA.*;
 import Trámites.*;
+import Trámites._1_Inicio.Dependencia;
 import Trámites._2_Registro.*;
+import Trámites._4_Seguimiento.SistemaTramite;
 import Trámites._6_Roles.*;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class RegistrarIngreso extends javax.swing.JFrame {
+public class RegistrarMovimiento extends javax.swing.JFrame {
 
     private Acceso acceso;
     
-    public RegistrarIngreso(Acceso acceso) {
+    public RegistrarMovimiento(Acceso acceso) {
         this.acceso = acceso;
         initComponents();
         getExpediente();
@@ -46,6 +50,20 @@ public class RegistrarIngreso extends javax.swing.JFrame {
                 resizeComponents();
             }
         });
+        
+        
+        SelSubtipoDependencia.setEnabled(false);
+        
+        obtenerTipos();
+        obtenerSubtipos();
+        SelTipoDependencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                obtenerSubtipos();
+            }
+        });
+        getExpediente();
+        setDependenciaID();
+        condTrans();
     }
 
     private void resizeComponents() {
@@ -62,41 +80,166 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         repaint();
     }
     
-    private Expediente expediente;
+    private void obtenerTipos() {
+
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
+        ListaEnlazada<Dependencia> L = new ListaEnlazada<>();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (!tipoRepetido(dependencia.getTipo(), L)) {
+                SelTipoDependencia.addItem(dependencia.getTipo());
+                L.insertar(dependencia); 
+            }
+            ptr = ptr.getNext();
+        
+        }
+        
+    }
+    
+    private boolean tipoRepetido(String tipo, ListaEnlazada<Dependencia> L) {
+        
+        Nodo<Dependencia> ptr = L.getHead();
+        boolean s = false;
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipo)) {
+                s = true;
+            }
+            ptr = ptr.getNext();
+            
+        }
+        
+        return s;
+    }
+    
+    private void obtenerSubtipos() {
+        String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
+        
+        SelSubtipoDependencia.removeAllItems();
+        
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipoSeleccionado) && dependencia.getSubTipo() != null) {
+                SelSubtipoDependencia.addItem(dependencia.getSubTipo());
+            }
+            ptr = ptr.getNext();
+        
+        }
+        
+        if (SelSubtipoDependencia.getItemCount() > 0) {
+            SelSubtipoDependencia.setEnabled(true);
+        } else {
+            SelSubtipoDependencia.setEnabled(false);
+        }
+        
+    }
+    
+    public void setDependenciaID() {
+        if (expediente != null) {
+            Dependencia dependencia = buscarDependenciaPorID(expediente.getDependencia().getID());
+            if (dependencia != null) {
+                SelTipoDependencia.setSelectedItem(dependencia.getTipo());
+                obtenerSubtipos();
+                SelSubtipoDependencia.setSelectedItem(dependencia.getSubTipo());
+            }
+        }
+    }
+    
+    private Dependencia obtenerDependencia() {
+        String tipoSeleccionado = (String) SelTipoDependencia.getSelectedItem();
+        String subtipoSeleccionado = (String) SelSubtipoDependencia.getSelectedItem();
+        Dependencia dep = null;
+
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getTipo().equals(tipoSeleccionado)) {
+                if (subtipoSeleccionado != null && !subtipoSeleccionado.isEmpty()) {
+                    if (dependencia.getSubTipo() != null && dependencia.getSubTipo().equals(subtipoSeleccionado)) {
+                        dep = dependencia;
+                        break;
+                    }
+                } else {
+                    dep = dependencia;
+                    break;
+                }
+            }
+            ptr = ptr.getNext();
+        }
+
+        return dep;
+    }
+    
+    private void seleccionarArchivo() {
+        JFileChooser fileChooser = new JFileChooser();
+        int M = fileChooser.showOpenDialog(this);
+
+        if (M == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = fileChooser.getSelectedFile();
+            archivo = archivoSeleccionado.getName();
+            NombreArchivo.setText(archivo);            
+            JOptionPane.showMessageDialog(this, "Se seleccionó el archivo " + archivoSeleccionado.getName() + ".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            Registrar.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private Dependencia buscarDependenciaPorID(String dependenciaID) {
+        Nodo<Dependencia> ptr = Datos.getListaDependencias().getHead();
+        while (ptr != null) {
+            Dependencia dependencia = ptr.getData();
+            if (dependencia.getID().equals(dependenciaID)) {
+                return dependencia;
+            }
+            ptr = ptr.getNext();
+        }
+        return null;
+    }
+    
+    public void condTrans() {
+        
+        if (this.expediente != null && this.obtenerDependencia() == this.expediente.getDependencia()) {
+            Registrar.setEnabled(true);
+        }
+        
+    }
+    
+    private Expediente expediente = null;
+    private String archivo = null;
     private String asunto;
     private String nombreDependencia;
-    private String identificador;
     private String documentoReferencia;
     
     public void getExpediente() {
         
-        Cola<Expediente> aux = new Cola<>();
-        Cola<Expediente> nuevo = Datos.getExpedientesNuevos();
+        ColaExpediente aux = new ColaExpediente();
+        ColaExpediente nuevo = Datos.getSistema().getExpedientes();
         Expediente z = null;
         int c = 0, c2 = Integer.MAX_VALUE;
-        while (!nuevo.esVacia()) {
+        while (!nuevo.estaVacia()) {
             z = nuevo.desencolar();
             aux.encolar(z);
             if (z.getDependencia() == Datos.buscarDependencia(((Personal) acceso.usuarioActual()).getDependenciaID()) && c < c2) {
-                Registrar.setEnabled(true);
                 expediente = z;
                 AsuntoLabel.setText(expediente.getAsunto());
                 DependenciaLabel.setText(expediente.getDependencia().toString());
-                identificador = Datos.getSistema().generarID(Datos.buscarDependencia(((Personal) acceso.usuarioActual()).getDependenciaID()));
-                expediente.setId(identificador);
-                IdentificadorLabel.setText(expediente.getId()); 
+                IdentificadorLabel1.setText(expediente.getId()); 
                 DatosInteresadoLabel.setText(expediente.getDatosInteresado().verInfo());
                 DocumentoReferenciaLabel.setText(expediente.getDocumentoReferencia());
+                if (expediente.isPrioridad()) {
+                    jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/Advertencia.png")));
+                    jLabel8.setText("Expediente prioritario");
+                }
                 c2 = c + 1; 
+                
             }
             c++;
         }
-        while(!aux.esVacia()){
-            Expediente M = aux.desencolar();
-            System.out.println(c + " | " + c2 + "\n  -> " + M.toString());
-            nuevo.encolar(M);
+        while(!aux.estaVacia()){
+            nuevo.encolar(aux.desencolar());
         }
-        System.out.println(nuevo.toString());
         
     }
         
@@ -120,9 +263,7 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         DependenciaLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        ExpedientePrioritario = new javax.swing.JCheckBox();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -133,6 +274,13 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         IdentificadorLabel = new javax.swing.JLabel();
         AsuntoLabel = new javax.swing.JLabel();
         DocumentoReferenciaLabel = new javax.swing.JLabel();
+        IdentificadorLabel1 = new javax.swing.JLabel();
+        Seleccionar = new javax.swing.JButton();
+        NombreArchivo = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        SelTipoDependencia = new javax.swing.JComboBox<>();
+        SelSubtipoDependencia = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -175,6 +323,7 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         });
 
         RegistrarMovimiento.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        RegistrarMovimiento.setSelected(true);
         RegistrarMovimiento.setText("Movimiento");
         RegistrarMovimiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -183,7 +332,6 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         });
 
         RegistrarIngreso.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        RegistrarIngreso.setSelected(true);
         RegistrarIngreso.setText("Ingreso");
         RegistrarIngreso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -192,7 +340,7 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        jLabel1.setText("Registrar ingreso");
+        jLabel1.setText("Registrar movimiento");
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/MenuPersonal.png"))); // NOI18N
@@ -209,7 +357,7 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         Volver.setName(""); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/RegistrarIngreso.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/RegistrarMovimiento.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -239,25 +387,10 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vectores/EstrellaULima.png"))); // NOI18N
         jLabel6.setToolTipText("");
 
-        jLabel7.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 102, 0));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel7.setText("Identificador:");
-        jLabel7.setToolTipText("");
-
-        jLabel8.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 102, 0));
+        jLabel8.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel8.setText("Prioridad:");
         jLabel8.setToolTipText("");
-
-        ExpedientePrioritario.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        ExpedientePrioritario.setText("Expediente prioritario");
-        ExpedientePrioritario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ExpedientePrioritarioActionPerformed(evt);
-            }
-        });
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 102, 0));
@@ -311,10 +444,10 @@ public class RegistrarIngreso extends javax.swing.JFrame {
             }
         });
 
-        IdentificadorLabel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        IdentificadorLabel.setForeground(new java.awt.Color(51, 51, 51));
+        IdentificadorLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        IdentificadorLabel.setForeground(new java.awt.Color(204, 102, 0));
         IdentificadorLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        IdentificadorLabel.setText(identificador);
+        IdentificadorLabel.setText("Expediente ID: ");
         IdentificadorLabel.setToolTipText("");
 
         AsuntoLabel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
@@ -329,6 +462,46 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         DocumentoReferenciaLabel.setText(documentoReferencia);
         DocumentoReferenciaLabel.setToolTipText("");
 
+        IdentificadorLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        IdentificadorLabel1.setForeground(new java.awt.Color(204, 102, 0));
+        IdentificadorLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        IdentificadorLabel1.setText("");
+        IdentificadorLabel1.setToolTipText("");
+
+        Seleccionar.setText("Seleccionar");
+        Seleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SeleccionarActionPerformed(evt);
+            }
+        });
+
+        NombreArchivo.setText(archivo);
+
+        jLabel12.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 102, 0));
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel12.setText("Adjuntar documento:");
+        jLabel12.setToolTipText("");
+
+        jLabel13.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 102, 0));
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel13.setText("Transferir expediente:");
+        jLabel13.setToolTipText("");
+
+        SelTipoDependencia.setToolTipText("");
+        SelTipoDependencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelTipoDependenciaActionPerformed(evt);
+            }
+        });
+
+        SelSubtipoDependencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelSubtipoDependenciaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -339,14 +512,20 @@ public class RegistrarIngreso extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DependenciaLabel))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(DependenciaLabel)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(IdentificadorLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(IdentificadorLabel1))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(18, 18, 18)
-                                .addComponent(IdentificadorLabel))
+                                .addGap(25, 25, 25)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Registrar))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addGap(18, 18, 18)
@@ -355,15 +534,20 @@ public class RegistrarIngreso extends javax.swing.JFrame {
                                 .addComponent(jLabel11)
                                 .addGap(18, 18, 18)
                                 .addComponent(AsuntoLabel))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addGap(18, 18, 18)
-                                .addComponent(ExpedientePrioritario, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel9)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(400, 400, 400)
-                        .addComponent(Registrar)))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(18, 18, 18)
+                                .addComponent(Seleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(NombreArchivo))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(18, 18, 18)
+                                .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -374,30 +558,39 @@ public class RegistrarIngreso extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel6))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(DependenciaLabel)))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(IdentificadorLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
+                        .addComponent(DependenciaLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(IdentificadorLabel)
+                            .addComponent(IdentificadorLabel1))))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
                     .addComponent(AsuntoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(12, 12, 12)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(ExpedientePrioritario, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
                     .addComponent(DocumentoReferenciaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addComponent(Registrar)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(Seleccionar)
+                        .addComponent(NombreArchivo))
+                    .addComponent(jLabel12))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(SelSubtipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SelTipoDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Registrar)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29))
         );
 
@@ -407,24 +600,7 @@ public class RegistrarIngreso extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(Encabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TextoVolver)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(16, 16, 16)
-                                .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(212, 212, 212)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -437,8 +613,28 @@ public class RegistrarIngreso extends javax.swing.JFrame {
                                 .addGap(36, 36, 36)
                                 .addComponent(IniciarTrámitePersonal)))
                         .addGap(36, 36, 36)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(TextoVolver)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(16, 16, 16)
+                                                .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(272, 272, 272)
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(71, 71, 71))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(16, 16, 16)))
+                        .addComponent(jLabel4)
+                        .addGap(267, 267, 267)))
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 1024, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -447,26 +643,20 @@ public class RegistrarIngreso extends javax.swing.JFrame {
                 .addComponent(Encabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(Volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(TextoVolver)
                                 .addGap(4, 4, 4)
-                                .addComponent(jLabel1))
+                                .addComponent(jLabel1)
+                                .addGap(75, 75, 75))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(34, 34, 34)
-                                .addComponent(jLabel4)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(270, 270, 270))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(93, 93, 93)
                                 .addComponent(RegistrarIngreso)
                                 .addGap(64, 64, 64)
                                 .addComponent(RegistrarMovimiento)
@@ -474,8 +664,13 @@ public class RegistrarIngreso extends javax.swing.JFrame {
                                 .addComponent(RegistrarFinalización)
                                 .addGap(77, 77, 77)
                                 .addComponent(IniciarTrámitePersonal)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addComponent(jLabel3)))
+                                .addGap(98, 98, 98)))
+                        .addGap(19, 19, 19)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(270, 270, 270))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -488,13 +683,13 @@ public class RegistrarIngreso extends javax.swing.JFrame {
     }//GEN-LAST:event_RegistrarFinalizaciónActionPerformed
 
     private void RegistrarMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarMovimientoActionPerformed
-        RegistrarMovimiento RegistrarMovimientoFrame = new RegistrarMovimiento(acceso);
-        RegistrarMovimientoFrame.setVisible(true);
-        dispose();
+        RegistrarMovimiento.setSelected(true);
     }//GEN-LAST:event_RegistrarMovimientoActionPerformed
 
     private void RegistrarIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarIngresoActionPerformed
-        RegistrarIngreso.setSelected(true);
+        RegistrarIngreso RegistrarIngresoFrame = new RegistrarIngreso(acceso);
+        RegistrarIngresoFrame.setVisible(true);
+        dispose();
     }//GEN-LAST:event_RegistrarIngresoActionPerformed
 
     private void IniciarTrámitePersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarTrámitePersonalActionPerformed
@@ -504,29 +699,34 @@ public class RegistrarIngreso extends javax.swing.JFrame {
     }//GEN-LAST:event_IniciarTrámitePersonalActionPerformed
 
     private void RegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarActionPerformed
-        Datos.getSistema().registrarExpediente((Datos.buscarDependencia(((Personal) acceso.usuarioActual()).getDependenciaID())), expediente);
-        
-        Cola<Expediente> aux = new Cola<>();
-        Cola<Expediente> nuevo = Datos.getExpedientesNuevos();
-        while (!nuevo.esVacia()) {
-            aux.encolar(nuevo.desencolar());
-        }
-        while(!aux.esVacia()){
-            Expediente M = aux.desencolar();
-            if (M != expediente) {
-                nuevo.encolar(M);
+        if (archivo != null || expediente.getDependencia() != this.obtenerDependencia()) {
+            if (archivo != null) {
+                Datos.sistema.agregarDocumento(expediente.getId(), archivo);
             }
+            if (expediente.getDependencia() != this.obtenerDependencia()) {
+                Datos.sistema.moverExpediente(expediente.getId(), this.obtenerDependencia());
+            }
+            JOptionPane.showMessageDialog(this, "Movimiento realizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            RegistrarMovimiento RegistrarIngresoFrame = new RegistrarMovimiento(acceso);
+            RegistrarIngresoFrame.setVisible(true);
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se realizó ningún movimiento.", "Sin movimiento", JOptionPane.WARNING_MESSAGE);
         }
-        
-        JOptionPane.showMessageDialog(this, "Expediente iniciado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        RegistrarIngreso RegistrarIngresoFrame = new RegistrarIngreso(acceso);
-        RegistrarIngresoFrame.setVisible(true);
-        dispose();
+
     }//GEN-LAST:event_RegistrarActionPerformed
 
-    private void ExpedientePrioritarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExpedientePrioritarioActionPerformed
-        expediente.setPrioridad(true);
-    }//GEN-LAST:event_ExpedientePrioritarioActionPerformed
+    private void SeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeleccionarActionPerformed
+        seleccionarArchivo();
+    }//GEN-LAST:event_SeleccionarActionPerformed
+
+    private void SelTipoDependenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelTipoDependenciaActionPerformed
+        
+    }//GEN-LAST:event_SelTipoDependenciaActionPerformed
+
+    private void SelSubtipoDependenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelSubtipoDependenciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SelSubtipoDependenciaActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -542,14 +742,16 @@ public class RegistrarIngreso extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistrarIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistrarMovimiento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistrarIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistrarMovimiento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistrarIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistrarMovimiento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistrarIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistrarMovimiento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -557,7 +759,7 @@ public class RegistrarIngreso extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Acceso acceso = new Acceso();
-                new RegistrarIngreso(acceso).setVisible(true);
+                new RegistrarMovimiento(acceso).setVisible(true);
             }
         });
     }
@@ -568,23 +770,28 @@ public class RegistrarIngreso extends javax.swing.JFrame {
     private javax.swing.JLabel DependenciaLabel;
     private javax.swing.JLabel DocumentoReferenciaLabel;
     private javax.swing.JPanel Encabezado;
-    private javax.swing.JCheckBox ExpedientePrioritario;
     private javax.swing.JLabel IdentificadorLabel;
+    private javax.swing.JLabel IdentificadorLabel1;
     private javax.swing.JButton IniciarTrámitePersonal;
+    private javax.swing.JLabel NombreArchivo;
     private javax.swing.JButton Registrar;
     private javax.swing.JRadioButton RegistrarFinalización;
     private javax.swing.JRadioButton RegistrarIngreso;
     private javax.swing.JRadioButton RegistrarMovimiento;
+    private javax.swing.JComboBox<String> SelSubtipoDependencia;
+    private javax.swing.JComboBox<String> SelTipoDependencia;
+    private javax.swing.JButton Seleccionar;
     private javax.swing.JLabel TextoVolver;
     private javax.swing.JLabel Volver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
