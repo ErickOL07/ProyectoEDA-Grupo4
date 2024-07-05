@@ -68,6 +68,8 @@ public class Datos {
         // Personal de dependencia
             // Facultades y Programas de Pregrado, Ingeniería de Sistemas
             listaUsuarios.insertar(new Personal("Jim Bryan", "Dios Luna", "10101010", "FPP_FI_Sis-", "jdios@aloe.ulima.edu.pe", "sistemas"));
+            // Facultades y Programas de Pregrado, Estudios Generales
+            listaUsuarios.insertar(new Personal("Gustavo Ruy", "Jiménez Mendoza", "01010101", "FPP_EG-", "gjmenez@aloe.ulima.edu.pe", "etica"));
             // Estudios de Posgrado
             listaUsuarios.insertar(new Personal("Gepeto", "Fossati", "00000001", "POS-", "gfossati@aloe.ulima.edu.pe", "posgrado"));
             // Oficinas Administrativas y Servicios, Deportes
@@ -77,6 +79,7 @@ public class Datos {
             listaUsuarios.insertar(new Persona("Makanaky", "La Realeza", "66666666", "makanaky@gmail.com", "makanaky"));
             // Institución
             listaUsuarios.insertar(new Institución("USB", "USB@ucv.edu.pe", "paolo"));
+            listaUsuarios.insertar(new Institución("Bembos", "administracion@bembos.com.pe", "bembos"));
             
             
         // Expedientes:
